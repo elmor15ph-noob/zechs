@@ -25,7 +25,7 @@ function App() {
   const [health, setHealth] = useState<HealthStatus | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState<string>('constellation');
-  const isDarkMode = false; // Light mode - FIORI default
+  const isDarkMode = true; // Dark mode - FIORI Belize theme
 
   useEffect(() => {
     fetch('http://localhost:8000/health')
