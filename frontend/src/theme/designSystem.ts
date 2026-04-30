@@ -29,12 +29,12 @@ export const fiori = {
   neutral80: '#666666',      // Darker gray
   neutral100: '#333333',     // Almost black
 
-  // Dark Mode Theme
-  darkBg: '#1A1A1A',         // SAP Dark background
-  darkSurface: '#2D2D2D',    // Elevated surface
-  darkBorder: '#404040',     // Border color
-  darkText: '#FFFFFF',       // Light text
-  darkTextSecondary: '#D0D0D0', // Secondary text
+  // FIORI Belize Dark Theme
+  darkBg: '#0a1929',         // FIORI Belize background (dark blue-black)
+  darkSurface: '#111f2e',    // FIORI Belize elevated surface
+  darkBorder: '#1a2a3a',     // FIORI Belize border
+  darkText: '#ffffff',       // Light text
+  darkTextSecondary: '#b0bec5' // Secondary text
 };
 
 export const colors = {

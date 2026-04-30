@@ -13,7 +13,7 @@ export const createFioriStyles = (isDarkMode: boolean) => `
   }
 
   .realtime-header {
-    background: ${isDarkMode ? '#2D2D2D' : '#FFFFFF'};
+    background: ${isDarkMode ? '#111f2e' : '#FFFFFF'};
     border-bottom: 2px solid #0A6ED4;
     padding: 1.5rem;
     display: flex;
@@ -77,9 +77,9 @@ export const createFioriStyles = (isDarkMode: boolean) => `
     display: flex;
     gap: 1rem;
     padding: 1.5rem;
-    background: ${isDarkMode ? '#2D2D2D' : '#FFFFFF'};
+    background: ${isDarkMode ? '#111f2e' : '#FFFFFF'};
     border-radius: 4px;
-    border: 1px solid ${isDarkMode ? '#404040' : '#F2F2F2'};
+    border: 1px solid ${isDarkMode ? '#1a2a3a' : '#F2F2F2'};
     margin-bottom: 1.5rem;
     align-items: center;
     box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.12);
@@ -97,8 +97,8 @@ export const createFioriStyles = (isDarkMode: boolean) => `
   }
 
   .module-box.inactive {
-    border-color: ${isDarkMode ? '#404040' : '#F2F2F2'};
-    background: ${isDarkMode ? '#1A1A1A' : '#F8F8F8'};
+    border-color: ${isDarkMode ? '#1a2a3a' : '#F2F2F2'};
+    background: ${isDarkMode ? '#0a1929' : '#F8F8F8'};
     color: ${isDarkMode ? '#999999' : '#999999'};
     opacity: 0.5;
   }
@@ -118,8 +118,8 @@ export const createFioriStyles = (isDarkMode: boolean) => `
 
   .transaction-card {
     padding: 1rem;
-    background: ${isDarkMode ? '#2D2D2D' : '#FFFFFF'};
-    border: 1px solid ${isDarkMode ? '#404040' : '#F2F2F2'};
+    background: ${isDarkMode ? '#111f2e' : '#FFFFFF'};
+    border: 1px solid ${isDarkMode ? '#1a2a3a' : '#F2F2F2'};
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.3s;
@@ -157,7 +157,7 @@ export const createFioriStyles = (isDarkMode: boolean) => `
 
   .transaction-description {
     font-size: 0.8rem;
-    color: ${isDarkMode ? '#D0D0D0' : '#666666'};
+    color: ${isDarkMode ? '#b0bec5' : '#666666'};
     line-height: 1.5;
     margin-bottom: 0.75rem;
   }
@@ -212,8 +212,8 @@ export const createFioriStyles = (isDarkMode: boolean) => `
 
   .gl-account-card {
     padding: 1rem;
-    background: ${isDarkMode ? '#2D2D2D' : '#FFFFFF'};
-    border: 1px solid ${isDarkMode ? '#404040' : '#F2F2F2'};
+    background: ${isDarkMode ? '#111f2e' : '#FFFFFF'};
+    border: 1px solid ${isDarkMode ? '#1a2a3a' : '#F2F2F2'};
     border-radius: 4px;
     transition: all 0.3s;
     box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.08);
@@ -247,8 +247,8 @@ export const createFioriStyles = (isDarkMode: boolean) => `
 
   .summary-section {
     padding: 1.5rem;
-    background: ${isDarkMode ? '#2D2D2D' : '#FFFFFF'};
-    border: 1px solid ${isDarkMode ? '#404040' : '#F2F2F2'};
+    background: ${isDarkMode ? '#111f2e' : '#FFFFFF'};
+    border: 1px solid ${isDarkMode ? '#1a2a3a' : '#F2F2F2'};
     border-radius: 4px;
     margin-top: 1.5rem;
     display: grid;
@@ -260,7 +260,7 @@ export const createFioriStyles = (isDarkMode: boolean) => `
   .summary-label {
     font-size: 0.8rem;
     font-weight: 600;
-    color: ${isDarkMode ? '#D0D0D0' : '#666666'};
+    color: ${isDarkMode ? '#b0bec5' : '#666666'};
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
