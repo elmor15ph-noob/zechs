@@ -1,50 +1,95 @@
 /**
- * Brain App Design System
+ * ZECHS Design System - SAP FIORI Theme
  * Unified theme and component styling for dark/light modes
  * All components must import and use these values
  */
 
+// FIORI Primary Color Palette
+export const fiori = {
+  primary: '#0A6ED4',        // SAP Blue
+  primaryHover: '#055399',   // Darker blue on hover
+  primaryActive: '#003D7A',  // Darkest blue on active
+  primaryLight: '#4DA3FF',   // Light blue for dark mode
+
+  // Semantic Status Colors
+  success: '#107E3E',        // FIORI Green
+  warning: '#E17B08',        // FIORI Orange
+  error: '#C00',             // FIORI Red
+  critical: '#BB0000',       // Critical red
+  information: '#0A6ED4',    // Info blue (same as primary)
+
+  // Neutral Palette
+  neutral100: '#FFFFFF',     // Pure white
+  neutral50: '#F8F8F8',      // Very light gray
+  neutral10: '#F2F2F2',      // Light gray
+  neutral5: '#F5F5F5',       // Slightly less light
+  neutral20: '#E8E8E8',      // Medium light gray
+  neutral40: '#CCCCCC',      // Medium gray
+  neutral60: '#999999',      // Dark gray
+  neutral80: '#666666',      // Darker gray
+  neutral100: '#333333',     // Almost black
+
+  // Dark Mode Theme
+  darkBg: '#1A1A1A',         // SAP Dark background
+  darkSurface: '#2D2D2D',    // Elevated surface
+  darkBorder: '#404040',     // Border color
+  darkText: '#FFFFFF',       // Light text
+  darkTextSecondary: '#D0D0D0', // Secondary text
+};
+
 export const colors = {
   dark: {
-    bg: '#0f1620',
-    card: '#1a2332',
-    header: '#1a3a52',
-    border: '#2a3a4a',
-    text: '#e0e8f0',
-    textSecondary: '#94a3b8',
-    accent: '#00d4ff',
-    accentDark: '#0a9fb5',
-    orange: '#ff6b35',
-    orangeLight: '#ff9500',
+    bg: fiori.darkBg,
+    card: fiori.darkSurface,
+    header: fiori.darkSurface,
+    border: fiori.darkBorder,
+    text: fiori.darkText,
+    textSecondary: fiori.darkTextSecondary,
+    accent: fiori.primaryLight,
+    accentDark: fiori.primary,
+    success: fiori.success,
+    warning: fiori.warning,
+    error: fiori.error,
   },
   light: {
-    bg: '#f0f4f8',
-    card: '#ffffff',
-    header: '#f8fafc',
-    border: '#e2e8f0',
-    text: '#1f2937',
-    textSecondary: '#64748b',
-    accent: '#6366f1',
-    accentDark: '#4f46e5',
-    orange: '#ff6b35',
-    orangeLight: '#ff9500',
+    bg: fiori.neutral50,
+    card: fiori.neutral100,
+    header: fiori.neutral50,
+    border: fiori.neutral10,
+    text: fiori.neutral100,
+    textSecondary: fiori.neutral80,
+    accent: fiori.primary,
+    accentDark: fiori.primaryActive,
+    success: fiori.success,
+    warning: fiori.warning,
+    error: fiori.error,
   },
 };
 
+// FIORI Elevation/Shadow System
 export const shadows = {
-  card: '0 12px 32px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 212, 255, 0.1)',
-  cardLight: '0 12px 32px rgba(0, 0, 0, 0.1)',
-  button: '0 4px 12px rgba(99, 102, 241, 0.3)',
-  buttonLight: '0 2px 8px rgba(99, 102, 241, 0.2)',
+  // Level 1: Subtle elevation
+  elevation1: '0 0 1px 0 rgba(0, 0, 0, 0.08)',
+  // Level 2: Card shadow
+  elevation2: '0 1px 4px 0 rgba(0, 0, 0, 0.12)',
+  // Level 3: Raised elevation
+  elevation3: '0 2px 8px 0 rgba(0, 0, 0, 0.16)',
+
+  // Legacy (backward compatibility)
+  card: '0 1px 4px 0 rgba(0, 0, 0, 0.12)',
+  cardLight: '0 0 1px 0 rgba(0, 0, 0, 0.08)',
+  button: '0 1px 4px 0 rgba(10, 110, 212, 0.12)',
+  buttonLight: '0 0 1px 0 rgba(10, 110, 212, 0.08)',
 };
 
+// FIORI Spacing System (4px base grid)
 export const spacing = {
-  xs: '0.25rem',
-  sm: '0.5rem',
-  md: '0.75rem',
-  lg: '1rem',
-  xl: '1.5rem',
-  xxl: '2rem',
+  xs: '0.25rem',   // 4px
+  sm: '0.5rem',    // 8px
+  md: '0.75rem',   // 12px
+  lg: '1rem',      // 16px
+  xl: '1.5rem',    // 24px
+  xxl: '2rem',     // 32px
 };
 
 export const fonts = {
@@ -52,52 +97,78 @@ export const fonts = {
   mono: "'Community', 'IBM Plex Mono', monospace",
 };
 
+// FIORI Button Styles
 export const buttonStyles = (isDark: boolean) => ({
   primary: {
-    background: isDark ? '#00d4ff' : '#6366f1',
-    color: isDark ? '#1e2a36' : '#ffffff',
+    background: fiori.primary,      // SAP Blue #0A6ED4
+    color: '#FFFFFF',
     border: 'none',
     padding: `${spacing.md} ${spacing.xl}`,
-    borderRadius: '3px',
+    borderRadius: '4px',
     cursor: 'pointer',
     fontWeight: '600',
-    fontSize: '0.9rem',
+    fontSize: '0.875rem',
     fontFamily: fonts.primary,
     transition: 'all 0.2s',
-    boxShadow: isDark ? `0 0 0 2px rgba(0, 212, 255, 0.2)` : shadows.button,
+    boxShadow: shadows.elevation2,
+  },
+  primaryHover: {
+    background: fiori.primaryHover,  // Darker blue on hover
+    color: '#FFFFFF',
+    border: 'none',
+    padding: `${spacing.md} ${spacing.xl}`,
+    borderRadius: '4px',
+    cursor: 'pointer',
+    fontWeight: '600',
+    fontSize: '0.875rem',
+    fontFamily: fonts.primary,
+    transition: 'all 0.2s',
   },
   secondary: {
-    background: isDark ? '#1a2332' : '#f8fafc',
-    color: isDark ? '#94a3b8' : '#64748b',
-    border: `1px solid ${isDark ? '#2a3a4a' : '#e2e8f0'}`,
+    background: isDark ? fiori.darkSurface : fiori.neutral50,
+    color: isDark ? fiori.darkTextSecondary : fiori.neutral80,
+    border: `1px solid ${isDark ? fiori.darkBorder : fiori.neutral10}`,
     padding: `${spacing.md} ${spacing.lg}`,
-    borderRadius: '3px',
+    borderRadius: '4px',
     cursor: 'pointer',
     fontWeight: '500',
-    fontSize: '0.9rem',
+    fontSize: '0.875rem',
+    fontFamily: fonts.primary,
+    transition: 'all 0.2s',
+  },
+  ghost: {
+    background: 'transparent',
+    color: fiori.primary,
+    border: `1px solid ${fiori.primary}`,
+    padding: `${spacing.md} ${spacing.lg}`,
+    borderRadius: '4px',
+    cursor: 'pointer',
+    fontWeight: '600',
+    fontSize: '0.875rem',
     fontFamily: fonts.primary,
     transition: 'all 0.2s',
   },
   danger: {
-    background: '#ef4444',
-    color: '#ffffff',
+    background: fiori.error,         // FIORI Red
+    color: '#FFFFFF',
     border: 'none',
     padding: `${spacing.md} ${spacing.xl}`,
-    borderRadius: '3px',
+    borderRadius: '4px',
     cursor: 'pointer',
     fontWeight: '600',
-    fontSize: '0.9rem',
+    fontSize: '0.875rem',
     fontFamily: fonts.primary,
     transition: 'all 0.2s',
   },
 });
 
+// FIORI Card Styles
 export const cardStyles = (isDark: boolean) => ({
   container: {
     background: isDark ? colors.dark.card : colors.light.card,
-    borderRadius: '8px',
-    padding: spacing.xl,
-    boxShadow: isDark ? shadows.card : shadows.cardLight,
+    borderRadius: '4px',
+    padding: spacing.lg,
+    boxShadow: shadows.elevation2,
     border: `1px solid ${isDark ? colors.dark.border : colors.light.border}`,
     color: isDark ? colors.dark.text : colors.light.text,
   },
@@ -109,26 +180,37 @@ export const cardStyles = (isDark: boolean) => ({
     paddingBottom: spacing.lg,
     borderBottom: `1px solid ${isDark ? colors.dark.border : colors.light.border}`,
   },
+  tile: {
+    background: isDark ? colors.dark.card : colors.light.card,
+    borderRadius: '4px',
+    padding: spacing.lg,
+    boxShadow: shadows.elevation1,
+    border: `1px solid ${isDark ? colors.dark.border : colors.light.border}`,
+    color: isDark ? colors.dark.text : colors.light.text,
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+  },
 });
 
+// FIORI Input Styles
 export const inputStyles = (isDark: boolean) => ({
   input: {
     padding: spacing.md,
-    background: isDark ? '#263544' : '#ffffff',
-    border: `1px solid ${isDark ? colors.dark.border : colors.light.border}`,
-    borderRadius: '3px',
+    background: isDark ? fiori.darkSurface : fiori.neutral100,
+    border: `1px solid ${isDark ? fiori.darkBorder : fiori.neutral10}`,
+    borderRadius: '4px',
     color: isDark ? colors.dark.text : colors.light.text,
-    fontSize: '0.9rem',
+    fontSize: '0.875rem',
     fontFamily: fonts.primary,
     transition: 'all 0.2s',
   },
   textarea: {
     padding: spacing.md,
-    background: isDark ? '#263544' : '#ffffff',
-    border: `1px solid ${isDark ? colors.dark.border : colors.light.border}`,
-    borderRadius: '3px',
+    background: isDark ? fiori.darkSurface : fiori.neutral100,
+    border: `1px solid ${isDark ? fiori.darkBorder : fiori.neutral10}`,
+    borderRadius: '4px',
     color: isDark ? colors.dark.text : colors.light.text,
-    fontSize: '0.9rem',
+    fontSize: '0.875rem',
     fontFamily: fonts.primary,
     minHeight: '80px',
     resize: 'vertical' as const,
@@ -138,35 +220,40 @@ export const inputStyles = (isDark: boolean) => ({
 
 /**
  * Component CSS Template for all new components
- * Copy this pattern for consistent theming
+ * SAP FIORI Design System - Use this pattern for consistent theming
  */
 export const componentCSSTemplate = `
-  /* Dark Mode (default) */
+  /* FIORI Dark Mode (default) */
   .component {
-    background: #1a2332;
-    color: #e0e8f0;
-    border: 1px solid #2a3a4a;
-    border-radius: 8px;
+    background: #2D2D2D;
+    color: #FFFFFF;
+    border: 1px solid #404040;
+    border-radius: 4px;
     padding: 1rem;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.12);
     font-family: 'Community', 'IBM Plex Sans', sans-serif;
   }
 
   .component button {
-    background: #00d4ff;
-    color: #0f1620;
+    background: #0A6ED4;        /* FIORI Primary Blue */
+    color: #FFFFFF;
     border: none;
     padding: 0.75rem 1.5rem;
-    border-radius: 3px;
+    border-radius: 4px;
     cursor: pointer;
     font-weight: 600;
+    font-size: 0.875rem;
     transition: all 0.2s;
     font-family: 'Community', 'IBM Plex Sans', sans-serif;
+    box-shadow: 0 1px 4px 0 rgba(10, 110, 212, 0.12);
   }
 
   .component button:hover {
-    background: #0ab5d4;
-    transform: translateY(-1px);
+    background: #055399;        /* FIORI Blue Hover */
+  }
+
+  .component button:active {
+    background: #003D7A;        /* FIORI Blue Active */
   }
 
   .component button:disabled {
@@ -174,20 +261,30 @@ export const componentCSSTemplate = `
     cursor: not-allowed;
   }
 
-  /* Light Mode */
+  /* Success Button */
+  .component button.success {
+    background: #107E3E;        /* FIORI Green */
+  }
+
+  .component button.success:hover {
+    background: #0A6531;
+  }
+
+  /* FIORI Light Mode */
   .light-mode .component {
-    background: #ffffff;
-    color: #1f2937;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+    background: #FFFFFF;
+    color: #333333;
+    border: 1px solid #F2F2F2;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.12);
   }
 
   .light-mode .component button {
-    background: #6366f1;
-    color: #ffffff;
+    background: #0A6ED4;        /* FIORI Primary Blue */
+    color: #FFFFFF;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.08);
   }
 
   .light-mode .component button:hover {
-    background: #4f46e5;
+    background: #055399;
   }
 `;

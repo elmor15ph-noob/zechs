@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Play, Pause, RotateCcw, Zap, ChevronDown, ChevronUp } from 'lucide-react';
+import { createFioriStyles } from '../theme/fioriStyles';
 
 interface RealtimeS4HANASimulatorProps {
   isDarkMode?: boolean;
@@ -392,6 +393,8 @@ const RealtimeS4HANASimulator: React.FC<RealtimeS4HANASimulatorProps> = ({ isDar
       min-height: auto;
       overflow-y: auto;
     }
+
+    ${createFioriStyles(isDarkMode)}
 
     .realtime-header {
       display: flex;
