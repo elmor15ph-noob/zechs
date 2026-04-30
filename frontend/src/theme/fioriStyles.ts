@@ -65,9 +65,10 @@ export const createFioriStyles = (isDarkMode: boolean) => `
     gap: 1.5rem;
     padding: 1rem;
     background: ${isDarkMode ? '#111f2e' : '#FFFFFF'};
-    border: 1px solid ${isDarkMode ? '#1a2a3a' : '#F2F2F2'};
+    border: 1px solid ${isDarkMode ? '#1a2a3a' : '#E0E0E0'};
     border-radius: 4px;
     box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.08);
+    color: ${isDarkMode ? '#FFFFFF' : '#000000'};
   }
 
   .progress-bar-container {
@@ -102,10 +103,11 @@ export const createFioriStyles = (isDarkMode: boolean) => `
     padding: 1.5rem;
     background: ${isDarkMode ? '#111f2e' : '#FFFFFF'};
     border-radius: 4px;
-    border: 1px solid ${isDarkMode ? '#1a2a3a' : '#F2F2F2'};
+    border: 1px solid ${isDarkMode ? '#1a2a3a' : '#E0E0E0'};
     margin-bottom: 1.5rem;
     align-items: center;
     box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.12);
+    color: ${isDarkMode ? '#FFFFFF' : '#000000'};
   }
 
   .module-box {
@@ -117,6 +119,7 @@ export const createFioriStyles = (isDarkMode: boolean) => `
     transition: all 0.3s;
     font-weight: 600;
     font-size: 0.9rem;
+    color: ${isDarkMode ? '#FFFFFF' : '#000000'};
   }
 
   .module-box.inactive {
@@ -137,18 +140,20 @@ export const createFioriStyles = (isDarkMode: boolean) => `
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1rem;
     margin-bottom: 1.5rem;
+    color: ${isDarkMode ? '#FFFFFF' : '#000000'};
   }
 
   .transaction-card {
     padding: 1rem;
     background: ${isDarkMode ? '#111f2e' : '#FFFFFF'};
-    border: 1px solid ${isDarkMode ? '#1a2a3a' : '#F2F2F2'};
+    border: 1px solid ${isDarkMode ? '#1a2a3a' : '#E0E0E0'};
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.3s;
     position: relative;
     overflow: hidden;
     box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.08);
+    color: ${isDarkMode ? '#FFFFFF' : '#000000'};
   }
 
   .transaction-card:hover {
@@ -231,15 +236,17 @@ export const createFioriStyles = (isDarkMode: boolean) => `
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1rem;
     margin-top: 1.5rem;
+    color: ${isDarkMode ? '#FFFFFF' : '#000000'};
   }
 
   .gl-account-card {
     padding: 1rem;
     background: ${isDarkMode ? '#111f2e' : '#FFFFFF'};
-    border: 1px solid ${isDarkMode ? '#1a2a3a' : '#F2F2F2'};
+    border: 1px solid ${isDarkMode ? '#1a2a3a' : '#E0E0E0'};
     border-radius: 4px;
     transition: all 0.3s;
     box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.08);
+    color: ${isDarkMode ? '#FFFFFF' : '#000000'};
   }
 
   .gl-account-card.flashing {
@@ -271,13 +278,14 @@ export const createFioriStyles = (isDarkMode: boolean) => `
   .summary-section {
     padding: 1.5rem;
     background: ${isDarkMode ? '#111f2e' : '#FFFFFF'};
-    border: 1px solid ${isDarkMode ? '#1a2a3a' : '#F2F2F2'};
+    border: 1px solid ${isDarkMode ? '#1a2a3a' : '#E0E0E0'};
     border-radius: 4px;
     margin-top: 1.5rem;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 1.5rem;
     box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.08);
+    color: ${isDarkMode ? '#FFFFFF' : '#000000'};
   }
 
   .summary-label {
