@@ -1,1045 +1,740 @@
-import React, { useState, useEffect } from 'react';
-import { ShoppingCart, CheckCircle, TrendingUp, DollarSign, BarChart3, AlertCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { ShoppingCart, CheckCircle, AlertCircle, TrendingUp, Package, DollarSign, Clock } from 'lucide-react';
 
-interface OrderData {
-  order_number: string;
-  customer: string;
-  order_value: number;
+interface SolutionOrderLineItem {
+  line_number: number;
+  product_name: string;
+  product_code: string;
+  quantity: number;
+  unit_price: number;
+  total_price: number;
+  billing_model: 'one-time' | 'recurring' | 'milestone';
+  billing_frequency?: string;
+  performance_obligation: string;
+  revenue_recognition_trigger: string;
+  revenue_amount: number;
+  deferred_amount: number;
+  target_sales_order_type: string;
+}
+
+interface SolutionOrder {
+  solution_order_id: string;
+  customer_name: string;
+  customer_id: string;
+  contract_date: string;
+  total_contract_value: number;
+  total_deferred_revenue: number;
   currency: string;
-  status: string;
-  engagement_type: string;
-  completion_percentage: number;
-  created_date: string;
+  status: 'Draft' | 'Active' | 'Executing' | 'Completed';
+  line_items: SolutionOrderLineItem[];
 }
 
-interface GLPosting {
-  account: string;
-  amount: number;
-  type: string;
-  description: string;
-}
-
-interface ARAgingBucket {
-  bucket: string;
-  days_overdue: number;
-  amount: number;
-  dunning_level: number;
-  next_action: string;
-  late_fees: number;
-}
-
-interface Scenario {
-  id: string;
-  name: string;
-  engagement_type: string;
-  total_value: number;
-  currency: string;
-}
-
-const fioriStyles = `
-  /* SAP Fiori Design System */
-  :root {
-    --sapBrandColor: #0070F2;
-    --sapHighlight: #1B90FF;
-    --sapAccentColor: #E76500;
-    --sapPositive: #36A41D;
-    --sapNegative: #BB0000;
-    --sapBackgroundColor: #F5F6F7;
-    --sapBaseColor: #FFFFFF;
-    --sapBorderColor: #D5DADD;
-    --sapTextColor: #232A31;
-    --sapSecondaryText: #556B82;
-    --sapCardBackground: #FFFFFF;
-    --sapCardBorder: 1px solid #D5DADD;
-    --sapShadow: 0 2px 4px rgba(0, 0, 0, 0.12);
-  }
-
-  .o2c-shell {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: var(--sapBackgroundColor);
-    padding: 2rem;
-    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
-  }
-
-  .o2c-header {
-    background-color: var(--sapBaseColor);
-    border-bottom: 2px solid var(--sapBrandColor);
-    padding: 1.5rem 2rem;
-    margin: -2rem -2rem 2rem -2rem;
-    box-shadow: var(--sapShadow);
-  }
-
-  .o2c-header-title {
-    margin: 0;
-    font-size: 1.75rem;
-    font-weight: 900;
-    color: var(--sapBrandColor);
-    letter-spacing: -0.5px;
-  }
-
-  .o2c-header-subtitle {
-    margin: 0.25rem 0 0 0;
-    font-size: 0.875rem;
-    color: var(--sapSecondaryText);
-  }
-
-  .o2c-main {
-    display: grid;
-    grid-template-columns: 1fr 380px;
-    gap: 1.5rem;
-  }
-
-  .o2c-content {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .o2c-card {
-    background-color: var(--sapCardBackground);
-    border-radius: 8px;
-    padding: 1.5rem;
-    box-shadow: var(--sapShadow);
-    border: var(--sapCardBorder);
-    transition: box-shadow 0.2s ease;
-  }
-
-  .o2c-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  }
-
-  .o2c-card-title {
-    margin: 0 0 1.5rem 0;
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--sapTextColor);
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    border-left: 4px solid var(--sapBrandColor);
-    padding-left: 1rem;
-  }
-
-  .o2c-card-title svg {
-    color: var(--sapBrandColor);
-    width: 24px;
-    height: 24px;
-  }
-
-  .o2c-steps {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 2rem;
-    position: relative;
-  }
-
-  .o2c-steps::before {
-    content: '';
-    position: absolute;
-    top: 20px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--sapBrandColor), var(--sapHighlight));
-    z-index: 0;
-  }
-
-  .o2c-step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    z-index: 1;
-    position: relative;
-    cursor: pointer;
-  }
-
-  .o2c-step-indicator {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: var(--sapBackgroundColor);
-    border: 2px solid var(--sapBorderColor);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    color: var(--sapSecondaryText);
-    transition: all 0.3s ease;
-  }
-
-  .o2c-step.active .o2c-step-indicator {
-    background: linear-gradient(135deg, var(--sapBrandColor), var(--sapHighlight));
-    color: var(--sapBaseColor);
-    border-color: var(--sapBrandColor);
-    box-shadow: 0 0 0 4px rgba(0, 112, 242, 0.15);
-  }
-
-  .o2c-step.completed .o2c-step-indicator {
-    background-color: var(--sapPositive);
-    color: var(--sapBaseColor);
-    border-color: var(--sapPositive);
-  }
-
-  .o2c-step-label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--sapSecondaryText);
-    text-align: center;
-    max-width: 80px;
-  }
-
-  .o2c-form-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .o2c-form-field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .o2c-form-label {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--sapTextColor);
-  }
-
-  .o2c-form-input,
-  .o2c-form-select {
-    padding: 1rem;
-    border: 1px solid var(--sapBorderColor);
-    border-radius: 6px;
-    font-size: 0.875rem;
-    background-color: var(--sapBaseColor);
-    color: var(--sapTextColor);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    font-family: inherit;
-  }
-
-  .o2c-form-input::placeholder {
-    color: var(--sapSecondaryText);
-  }
-
-  .o2c-form-input:focus,
-  .o2c-form-select:focus {
-    outline: none;
-    border-color: var(--sapBrandColor);
-    box-shadow: 0 0 0 4px rgba(0, 112, 242, 0.1);
-  }
-
-  .o2c-button {
-    padding: 1rem 2rem;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    margin-top: 1.5rem;
-    font-family: inherit;
-  }
-
-  .o2c-button-primary {
-    background: linear-gradient(135deg, var(--sapBrandColor), var(--sapHighlight));
-    color: var(--sapBaseColor);
-    box-shadow: 0 2px 8px rgba(0, 112, 242, 0.25);
-  }
-
-  .o2c-button-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 112, 242, 0.35);
-  }
-
-  .o2c-button-primary:active {
-    transform: translateY(0);
-  }
-
-  .o2c-button-primary:disabled {
-    background: var(--sapBorderColor);
-    cursor: not-allowed;
-    box-shadow: none;
-    opacity: 0.6;
-  }
-
-  .o2c-kpi-card {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 1.5rem;
-    background-color: var(--sapCardBackground);
-    border-radius: 8px;
-    border: var(--sapCardBorder);
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .o2c-kpi-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--sapBrandColor), var(--sapHighlight));
-  }
-
-  .o2c-kpi-label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--sapSecondaryText);
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-  }
-
-  .o2c-kpi-value {
-    font-size: 1.75rem;
-    font-weight: 900;
-    background: linear-gradient(135deg, var(--sapBrandColor), var(--sapHighlight));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .o2c-status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .o2c-status-badge.draft {
-    background-color: var(--sapBackgroundColor);
-    color: var(--sapSecondaryText);
-    border: 1px solid var(--sapBorderColor);
-  }
-
-  .o2c-status-badge.submitted {
-    background-color: rgba(0, 112, 242, 0.1);
-    color: var(--sapBrandColor);
-    border: 1px solid var(--sapBrandColor);
-  }
-
-  .o2c-status-badge.confirmed {
-    background-color: rgba(54, 164, 29, 0.1);
-    color: var(--sapPositive);
-    border: 1px solid var(--sapPositive);
-  }
-
-  .o2c-status-badge.invoiced {
-    background-color: rgba(231, 101, 0, 0.1);
-    color: var(--sapAccentColor);
-    border: 1px solid var(--sapAccentColor);
-  }
-
-  .o2c-status-badge.posted {
-    background-color: rgba(54, 164, 29, 0.1);
-    color: var(--sapPositive);
-    border: 1px solid var(--sapPositive);
-  }
-
-  .o2c-sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .o2c-sidebar-panel {
-    background-color: var(--sapCardBackground);
-    border-radius: 8px;
-    padding: 1.5rem;
-    border: var(--sapCardBorder);
-    transition: box-shadow 0.2s ease;
-  }
-
-  .o2c-sidebar-panel:hover {
-    box-shadow: var(--sapShadow);
-  }
-
-  .o2c-sidebar-title {
-    margin: 0 0 1rem 0;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--sapTextColor);
-    border-bottom: 2px solid var(--sapBrandColor);
-    padding-bottom: 0.5rem;
-  }
-
-  .o2c-data-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid var(--sapBackgroundColor);
-    font-size: 0.875rem;
-  }
-
-  .o2c-data-row:last-child {
-    border-bottom: none;
-  }
-
-  .o2c-data-label {
-    font-weight: 600;
-    color: var(--sapSecondaryText);
-  }
-
-  .o2c-data-value {
-    font-weight: 700;
-    color: var(--sapTextColor);
-  }
-
-  .o2c-gl-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.875rem;
-    margin-top: 1rem;
-  }
-
-  .o2c-gl-table th {
-    background-color: var(--sapBackgroundColor);
-    padding: 0.75rem;
-    text-align: left;
-    font-weight: 700;
-    color: var(--sapTextColor);
-    border-bottom: 2px solid var(--sapBrandColor);
-  }
-
-  .o2c-gl-table td {
-    padding: 0.75rem;
-    border-bottom: 1px solid var(--sapBorderColor);
-  }
-
-  .o2c-gl-table tr:hover {
-    background-color: var(--sapBackgroundColor);
-  }
-
-  .o2c-loading {
-    text-align: center;
-    padding: 2rem;
-    color: var(--sapSecondaryText);
-  }
-
-  .o2c-error {
-    background-color: rgba(187, 0, 0, 0.08);
-    border: 1px solid var(--sapNegative);
-    color: var(--sapNegative);
-    padding: 1rem;
-    border-radius: 6px;
-    margin-bottom: 1rem;
-    font-weight: 500;
-  }
-
-  @media (max-width: 1024px) {
-    .o2c-main {
-      grid-template-columns: 1fr;
+const solutionOrderDemo: SolutionOrder = {
+  solution_order_id: 'ZORD-2026-0415-001',
+  customer_name: 'Acme Corporation Global',
+  customer_id: '0001234567',
+  contract_date: '2026-04-15',
+  total_contract_value: 830000,
+  total_deferred_revenue: 480000,
+  currency: 'USD',
+  status: 'Active',
+  line_items: [
+    {
+      line_number: 10,
+      product_name: 'SAP S/4HANA Enterprise License',
+      product_code: 'S4H-PERPETUAL-ENT',
+      quantity: 1,
+      unit_price: 500000,
+      total_price: 500000,
+      billing_model: 'one-time',
+      performance_obligation: 'License delivery and activation',
+      revenue_recognition_trigger: 'Go-live acceptance',
+      revenue_amount: 500000,
+      deferred_amount: 0,
+      target_sales_order_type: 'OR (Sales Order for One-Time License)'
+    },
+    {
+      line_number: 20,
+      product_name: 'SAP S/4HANA Cloud SaaS (36 months)',
+      product_code: 'S4H-SAAS-36MO',
+      quantity: 36,
+      unit_price: 5000,
+      total_price: 180000,
+      billing_model: 'recurring',
+      billing_frequency: 'Monthly',
+      performance_obligation: 'Monthly cloud service delivery',
+      revenue_recognition_trigger: 'Monthly service delivery',
+      revenue_amount: 0,
+      deferred_amount: 180000,
+      target_sales_order_type: 'OR (Subscription Order with Recurring Billing)'
+    },
+    {
+      line_number: 30,
+      product_name: 'Implementation & Change Management Services',
+      product_code: 'S4H-IMPL-SERVICES',
+      quantity: 1,
+      unit_price: 150000,
+      total_price: 150000,
+      billing_model: 'milestone',
+      billing_frequency: 'Milestone-based (4 phases)',
+      performance_obligation: 'Phased implementation delivery',
+      revenue_recognition_trigger: 'Milestone completion and acceptance',
+      revenue_amount: 0,
+      deferred_amount: 150000,
+      target_sales_order_type: 'ZS (Service Order with Milestone Billing)'
     }
+  ]
+};
 
-    .o2c-form-group {
-      grid-template-columns: 1fr;
+const O2COrchestrator: React.FC<{ isDarkMode?: boolean }> = ({ isDarkMode = true }) => {
+  const [selectedOrder] = useState<SolutionOrder>(solutionOrderDemo);
+  const [activeTab, setActiveTab] = useState('overview');
+
+  const styles = `
+    .o2c-container {
+      background: ${isDarkMode ? '#0a1929' : '#f5f5f5'};
+      color: ${isDarkMode ? '#ffffff' : '#000000'};
+      min-height: 100vh;
+      padding: 2rem;
+      font-family: 'Community', 'IBM Plex Sans', sans-serif;
     }
 
     .o2c-header {
-      padding: 1rem 1.5rem;
+      background: ${isDarkMode ? '#111f2e' : '#ffffff'};
+      border-bottom: 3px solid #0A6ED4;
+      padding: 2rem;
+      margin: -2rem -2rem 2rem -2rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
     }
 
-    .o2c-header-title {
+    .o2c-title {
+      margin: 0;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #0A6ED4;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .o2c-subtitle {
+      margin: 0.5rem 0 0 0;
+      font-size: 0.9rem;
+      color: ${isDarkMode ? '#b0bec5' : '#666666'};
+    }
+
+    .o2c-main {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 2rem;
+    }
+
+    .o2c-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .o2c-card {
+      background: ${isDarkMode ? '#111f2e' : '#ffffff'};
+      border: 1px solid ${isDarkMode ? '#1a2a3a' : '#e0e0e0'};
+      border-radius: 4px;
+      padding: 1.5rem;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    .o2c-card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #0A6ED4;
+      margin: 0 0 1.5rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid ${isDarkMode ? '#1a2a3a' : '#e0e0e0'};
+    }
+
+    .o2c-tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid ${isDarkMode ? '#1a2a3a' : '#e0e0e0'};
+    }
+
+    .o2c-tab {
+      padding: 0.75rem 1.5rem;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: ${isDarkMode ? '#b0bec5' : '#666666'};
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .o2c-tab.active {
+      color: #0A6ED4;
+      border-bottom-color: #0A6ED4;
+    }
+
+    .o2c-summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .o2c-summary-item {
+      background: ${isDarkMode ? '#1a2a3a' : '#f8f8f8'};
+      border-radius: 4px;
+      padding: 1rem;
+      text-align: center;
+      border-left: 4px solid #0A6ED4;
+    }
+
+    .o2c-summary-value {
       font-size: 1.5rem;
+      font-weight: 700;
+      color: #0A6ED4;
+      margin-bottom: 0.25rem;
+    }
+
+    .o2c-summary-label {
+      font-size: 0.8rem;
+      color: ${isDarkMode ? '#b0bec5' : '#666666'};
+      text-transform: uppercase;
+    }
+
+    .o2c-line-item {
+      background: ${isDarkMode ? '#1a2a3a' : '#f8f8f8'};
+      border-radius: 4px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-left: 4px solid #107E3E;
+    }
+
+    .o2c-line-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 0.75rem;
+    }
+
+    .o2c-line-item-title {
+      font-weight: 700;
+      color: ${isDarkMode ? '#ffffff' : '#000000'};
+      font-size: 0.95rem;
+    }
+
+    .o2c-line-item-badge {
+      background: #107E3E;
+      color: #ffffff;
+      padding: 0.25rem 0.75rem;
+      border-radius: 2px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .o2c-line-item-details {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+      font-size: 0.85rem;
+    }
+
+    .o2c-detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem;
+      background: ${isDarkMode ? '#2a3a4a' : '#ffffff'};
+      border-radius: 2px;
+    }
+
+    .o2c-detail-label {
+      color: ${isDarkMode ? '#b0bec5' : '#666666'};
+      font-weight: 600;
+    }
+
+    .o2c-detail-value {
+      color: #0A6ED4;
+      font-weight: 700;
+    }
+
+    .o2c-flow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem;
+      background: ${isDarkMode ? '#1a2a3a' : '#f8f8f8'};
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      border: 1px solid ${isDarkMode ? '#2a3a4a' : '#e0e0e0'};
+    }
+
+    .o2c-flow-step {
+      flex: 1;
+      text-align: center;
+    }
+
+    .o2c-flow-step-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #0A6ED4;
+      margin-bottom: 0.25rem;
+    }
+
+    .o2c-flow-step-desc {
+      font-size: 0.8rem;
+      color: ${isDarkMode ? '#b0bec5' : '#666666'};
+    }
+
+    .o2c-flow-arrow {
+      color: #0A6ED4;
+      margin: 0 0.5rem;
+      font-weight: bold;
+    }
+
+    .o2c-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .o2c-sidebar-card {
+      background: ${isDarkMode ? '#111f2e' : '#ffffff'};
+      border: 1px solid ${isDarkMode ? '#1a2a3a' : '#e0e0e0'};
+      border-radius: 4px;
+      padding: 1rem;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    .o2c-sidebar-title {
+      font-weight: 700;
+      color: #0A6ED4;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .o2c-status-badge {
+      display: inline-block;
+      background: #107E3E;
+      color: #ffffff;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .o2c-info-item {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid ${isDarkMode ? '#1a2a3a' : '#e0e0e0'};
+      font-size: 0.85rem;
+    }
+
+    .o2c-info-item:last-child {
+      border-bottom: none;
+    }
+
+    .o2c-info-label {
+      color: ${isDarkMode ? '#b0bec5' : '#666666'};
+      font-weight: 600;
+    }
+
+    .o2c-info-value {
+      color: ${isDarkMode ? '#ffffff' : '#000000'};
+      margin-top: 0.25rem;
+      font-weight: 700;
+    }
+
+    .o2c-section {
+      display: ${activeTab === 'overview' ? 'block' : 'none'};
+    }
+
+    .o2c-section.hidden {
+      display: none;
+    }
+
+    .o2c-kpi-box {
+      background: linear-gradient(135deg, rgba(10, 110, 212, 0.1) 0%, rgba(16, 126, 62, 0.1) 100%);
+      border-left: 4px solid #0A6ED4;
+      padding: 1rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+
+    .o2c-kpi-label {
+      color: ${isDarkMode ? '#b0bec5' : '#666666'};
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .o2c-kpi-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #0A6ED4;
+      margin-top: 0.5rem;
+    }
+  `;
+
+  if (typeof document !== 'undefined') {
+    const style = document.createElement('style');
+    style.textContent = styles;
+    if (!document.head.querySelector('style[data-o2c]')) {
+      style.setAttribute('data-o2c', 'true');
+      document.head.appendChild(style);
     }
   }
-`;
-
-if (typeof document !== 'undefined') {
-  const style = document.createElement('style');
-  style.textContent = fioriStyles;
-  document.head.appendChild(style);
-}
-
-export default function O2COrchestrator() {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [orderData, setOrderData] = useState<OrderData | null>(null);
-  const [glPostings, setGlPostings] = useState<GLPosting[]>([]);
-  const [arAging, setArAging] = useState<ARAgingBucket[]>([]);
-  const [scenarios, setScenarios] = useState<Scenario[]>([]);
-  const [selectedScenario, setSelectedScenario] = useState<string>('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const API_BASE = 'http://localhost:8000/api/o2c';
-
-  useEffect(() => {
-    // Load scenarios on mount
-    fetchScenarios();
-  }, []);
-
-  const fetchScenarios = async () => {
-    try {
-      const res = await fetch(`${API_BASE}/scenarios`);
-      if (res.ok) {
-        const data = await res.json();
-        setScenarios(data);
-      }
-    } catch (err) {
-      console.error('Failed to load scenarios:', err);
-    }
-  };
-
-  const handleCreateOrder = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    // Get scenario values if selected
-    let scenario = scenarios.find(s => s.id === selectedScenario);
-
-    const orderPayload = {
-      customer: scenario ? `${scenario.name.split(' ')[0]} Corp` : 'Global Enterprise Corp',
-      order_value: scenario ? scenario.total_value : 150000,
-      currency: scenario ? scenario.currency : 'EUR',
-      engagement_type: scenario ? scenario.engagement_type : 'T&M',
-    };
-
-    try {
-      const res = await fetch(`${API_BASE}/orders`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(orderPayload),
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        setOrderData(data);
-        setCurrentStep(1);
-        setSelectedScenario(''); // Reset selector
-      } else {
-        setError('Failed to create order');
-      }
-    } catch (err) {
-      setError(`Error: ${err}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleUpdateProgress = async (percentage: number) => {
-    if (!orderData) return;
-    setLoading(true);
-
-    try {
-      const res = await fetch(`${API_BASE}/orders/progress`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          order_number: orderData.order_number,
-          completion_percentage: percentage,
-        }),
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        setOrderData(data);
-
-        // Fetch GL postings
-        const glRes = await fetch(`${API_BASE}/orders/${orderData.order_number}/gl-posting`);
-        if (glRes.ok) {
-          setGlPostings(await glRes.json());
-        }
-
-        // Fetch AR aging
-        const arRes = await fetch(`${API_BASE}/orders/${orderData.order_number}/ar-aging`);
-        if (arRes.ok) {
-          setArAging(await arRes.json());
-        }
-
-        setCurrentStep(Math.min(5, Math.floor(percentage / 20) + 1));
-      }
-    } catch (err) {
-      setError(`Error: ${err}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const steps = [
-    { label: 'Order', icon: ShoppingCart },
-    { label: 'Confirm', icon: CheckCircle },
-    { label: 'Invoice', icon: TrendingUp },
-    { label: 'Revenue', icon: DollarSign },
-    { label: 'AR Aging', icon: BarChart3 },
-    { label: 'GL Post', icon: AlertCircle },
-  ];
-
-  const painPoints = [
-    {
-      id: 'pp-1',
-      asIs: 'Manual cost center & legal entity mapping between Workday and SAP',
-      tobe: 'Automated integration with master data governance',
-      step: 'Order',
-      config: 'SAP MDG + OData sync, FARR_D entity master mapping',
-    },
-    {
-      id: 'pp-2',
-      asIs: 'Renewal process inconsistent—no formal contract linkage',
-      tobe: 'Automated order status tracking with renewal flag',
-      step: 'Confirm',
-      config: 'SO type determination rules, contract linkage in FARR_CONTRACT',
-    },
-    {
-      id: 'pp-3',
-      asIs: 'Revenue recognition by contract type is manual—no audit trail',
-      tobe: 'IFRS 15 compliance via PBO (Performance-Based Objects) automation',
-      step: 'Invoice',
-      config: 'RAR Billing Rules (BRFPLUS), PBO transaction posting',
-    },
-    {
-      id: 'pp-4',
-      asIs: 'Revenue calc for T&M/Fixed/Milestone requires spreadsheet',
-      tobe: 'Real-time recognition % calculation based on business logic',
-      step: 'Revenue',
-      config: 'RAR_POB monitoring (% complete logic), FI-RA module integration',
-    },
-    {
-      id: 'pp-5',
-      asIs: 'Prepayment tracking across projects causes manual reconciliation',
-      tobe: 'AR aging shows all prepayment status with dunning escalation',
-      step: 'AR Aging',
-      config: 'Prepayment clearing in S/4, dunning rules per customer segment',
-    },
-    {
-      id: 'pp-6',
-      asIs: 'No real-time GL visibility—finance reconciliation is 10+ days',
-      tobe: 'Immediate GL posting impact visibility for each transaction',
-      step: 'GL Post',
-      config: 'Auto-posting to GL accounts (1200/4000/2100/3000), SAP Posting Control',
-    },
-  ];
 
   return (
-    <div className="o2c-shell">
-      <header className="o2c-header">
-        <h1 className="o2c-header-title">O2C Global Solution Orchestrator</h1>
-        <p className="o2c-header-subtitle">Order-to-Cash with IFRS 15 RAR Integration</p>
-      </header>
-
-      {error && <div className="o2c-error">{error}</div>}
+    <div className={`o2c-container ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
+      <div className="o2c-header">
+        <h1 className="o2c-title">
+          <ShoppingCart size={32} />
+          Solution Order Orchestrator
+        </h1>
+        <p className="o2c-subtitle">
+          Complete Order-to-Cash flow with multi-item solution orders, diverse billing models, and IFRS 15 revenue recognition
+        </p>
+      </div>
 
       <div className="o2c-main">
         <div className="o2c-content">
-          <div className="o2c-card">
-            <div className="o2c-steps">
-              {steps.map((step, idx) => {
-                const StepIcon = step.icon;
-                const isActive = idx === currentStep;
-                const isCompleted = idx < currentStep;
-                return (
-                  <div
-                    key={idx}
-                    className={`o2c-step ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`}
-                    onClick={() => idx <= currentStep && setCurrentStep(idx)}
-                  >
-                    <div className="o2c-step-indicator">{isCompleted ? '✓' : idx + 1}</div>
-                    <div className="o2c-step-label">{step.label}</div>
-                  </div>
-                );
-              })}
-            </div>
+          {/* Tabs */}
+          <div className="o2c-tabs">
+            <button
+              className={`o2c-tab ${activeTab === 'overview' ? 'active' : ''}`}
+              onClick={() => setActiveTab('overview')}
+            >
+              📋 Overview
+            </button>
+            <button
+              className={`o2c-tab ${activeTab === 'lineitems' ? 'active' : ''}`}
+              onClick={() => setActiveTab('lineitems')}
+            >
+              📦 Line Items
+            </button>
+            <button
+              className={`o2c-tab ${activeTab === 'workflow' ? 'active' : ''}`}
+              onClick={() => setActiveTab('workflow')}
+            >
+              🔄 Workflow
+            </button>
           </div>
 
-          {currentStep === 0 && !orderData && (
-            <>
+          {/* Overview Tab */}
+          {activeTab === 'overview' && (
+            <div>
               <div className="o2c-card">
-                <h3 className="o2c-card-title">
-                  <AlertCircle size={24} />
-                  Order-to-Cash: Current State vs. Future State
-                </h3>
-                <div style={{ marginBottom: '1.5rem' }}>
-                  <p style={{ fontSize: '0.875rem', color: '#666666', marginBottom: '1rem' }}>
-                    This orchestration demonstrates how a modern O2C process architecture resolves common pain points and automates manual steps in the order lifecycle.
-                  </p>
-                  <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 1fr',
-                    gap: '1rem',
-                    fontSize: '0.8rem',
-                  }}>
-                    {painPoints.map((pp) => (
-                      <div key={pp.id} style={{
-                        padding: '1rem',
-                        backgroundColor: '#F5F5F5',
-                        borderLeft: '4px solid #0066CC',
-                        borderRadius: '4px',
-                      }}>
-                        <div style={{ fontWeight: 600, marginBottom: '0.5rem', color: '#333333' }}>
-                          {pp.step}
-                        </div>
-                        <div style={{ marginBottom: '0.75rem' }}>
-                          <div style={{ color: '#666666', fontWeight: 500 }}>AS IS:</div>
-                          <div style={{ color: '#999999', fontSize: '0.75rem' }}>{pp.asIs}</div>
-                        </div>
-                        <div style={{ marginBottom: '0.75rem' }}>
-                          <div style={{ color: '#107E3E', fontWeight: 500 }}>TO BE:</div>
-                          <div style={{ color: '#2d5016', fontSize: '0.75rem' }}>{pp.tobe}</div>
-                        </div>
-                        <div style={{
-                          padding: '0.5rem',
-                          backgroundColor: '#E3F2FD',
-                          borderRadius: '3px',
-                          fontSize: '0.7rem',
-                          color: '#0066CC',
-                          fontFamily: 'monospace',
-                        }}>
-                          {pp.config}
-                        </div>
-                      </div>
-                    ))}
+                <h2 className="o2c-card-title">
+                  <Package size={24} />
+                  Solution Order: {selectedOrder.solution_order_id}
+                </h2>
+
+                <div className="o2c-summary">
+                  <div className="o2c-summary-item">
+                    <div className="o2c-summary-value">${selectedOrder.total_contract_value.toLocaleString()}</div>
+                    <div className="o2c-summary-label">Total Contract Value</div>
+                  </div>
+                  <div className="o2c-summary-item">
+                    <div className="o2c-summary-value">${selectedOrder.total_deferred_revenue.toLocaleString()}</div>
+                    <div className="o2c-summary-label">Deferred Revenue</div>
+                  </div>
+                  <div className="o2c-summary-item">
+                    <div className="o2c-summary-value">{selectedOrder.line_items.length}</div>
+                    <div className="o2c-summary-label">Line Items</div>
                   </div>
                 </div>
-              </div>
-              <div className="o2c-card">
-                <h3 className="o2c-card-title">
-                  <ShoppingCart size={24} />
-                  Create Sales Order
-                </h3>
-                <p style={{ fontSize: '0.875rem', color: '#666666', marginBottom: '1.5rem' }}>
-                  Start with a professional services order (T&M, Fixed Price, or Retainer) and watch how the O2C process automates manual steps through intelligent automation and SAP integration.
+
+                <p style={{ marginTop: '1.5rem', fontSize: '0.9rem', color: isDarkMode ? '#b0bec5' : '#666666' }}>
+                  <strong>Concept:</strong> This solution order contains 3 distinct line items with different billing models and revenue recognition triggers:
+                  <br />• License (one-time revenue at go-live)
+                  <br />• SaaS subscription (recurring monthly revenue)
+                  <br />• Implementation services (milestone-based revenue)
                 </p>
+              </div>
 
-                {scenarios.length > 0 && (
-                  <div style={{ marginBottom: '1.5rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.875rem', color: '#333333' }}>
-                      Select Scenario Template:
-                    </label>
-                    <select
-                      value={selectedScenario}
-                      onChange={(e) => setSelectedScenario(e.target.value)}
-                      style={{
-                        width: '100%',
-                        padding: '0.75rem',
-                        border: '1px solid #E0E0E0',
-                        borderRadius: '4px',
-                        fontSize: '0.875rem',
-                        backgroundColor: '#FFFFFF',
-                        color: '#333333',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      <option value="">-- Or create custom order --</option>
-                      {scenarios.map((scenario) => (
-                        <option key={scenario.id} value={scenario.id}>
-                          {scenario.name} • €{scenario.total_value.toLocaleString()} {scenario.currency}
-                        </option>
-                      ))}
-                    </select>
+              <div className="o2c-card">
+                <h2 className="o2c-card-title">
+                  <TrendingUp size={24} />
+                  Revenue Recognition Strategy
+                </h2>
 
-                    {selectedScenario && (
-                      <div style={{
-                        marginTop: '1rem',
-                        padding: '0.75rem',
-                        backgroundColor: '#E3F2FD',
-                        borderRadius: '4px',
-                        fontSize: '0.8rem',
-                        color: '#0066CC',
-                        fontWeight: 500,
-                      }}>
-                        Selected: {scenarios.find(s => s.id === selectedScenario)?.engagement_type}
-                      </div>
-                    )}
+                <div className="o2c-flow">
+                  <div className="o2c-flow-step">
+                    <div className="o2c-flow-step-title">Line 10: License</div>
+                    <div className="o2c-flow-step-desc">$500K (One-time)</div>
                   </div>
-                )}
+                  <div className="o2c-flow-arrow">→</div>
+                  <div className="o2c-flow-step">
+                    <div className="o2c-flow-step-title">Recognize Immediately</div>
+                    <div className="o2c-flow-step-desc">At Go-Live</div>
+                  </div>
+                </div>
 
-                <button className="o2c-button o2c-button-primary" onClick={handleCreateOrder} disabled={loading} style={{ width: '100%' }}>
-                  {loading ? 'Creating...' : selectedScenario ? 'Create Order from Template' : 'Create Order'}
-                </button>
-              </div>
-            </>
-          )}
+                <div className="o2c-flow">
+                  <div className="o2c-flow-step">
+                    <div className="o2c-flow-step-title">Line 20: SaaS</div>
+                    <div className="o2c-flow-step-desc">$180K (36 months)</div>
+                  </div>
+                  <div className="o2c-flow-arrow">→</div>
+                  <div className="o2c-flow-step">
+                    <div className="o2c-flow-step-title">Recognize Monthly</div>
+                    <div className="o2c-flow-step-desc">$5K/month</div>
+                  </div>
+                </div>
 
-          {orderData && currentStep === 1 && (
-            <div className="o2c-card">
-              <h3 className="o2c-card-title">
-                <CheckCircle size={24} />
-                Order Confirmation
-              </h3>
-              <div className="o2c-data-row">
-                <span className="o2c-data-label">Order:</span>
-                <span className="o2c-data-value">{orderData.order_number}</span>
+                <div className="o2c-flow">
+                  <div className="o2c-flow-step">
+                    <div className="o2c-flow-step-title">Line 30: Services</div>
+                    <div className="o2c-flow-step-desc">$150K (Milestone)</div>
+                  </div>
+                  <div className="o2c-flow-arrow">→</div>
+                  <div className="o2c-flow-step">
+                    <div className="o2c-flow-step-title">Recognize by Phase</div>
+                    <div className="o2c-flow-step-desc">On Completion</div>
+                  </div>
+                </div>
               </div>
-              <div className="o2c-data-row">
-                <span className="o2c-data-label">Customer:</span>
-                <span className="o2c-data-value">{orderData.customer}</span>
-              </div>
-              <div className="o2c-data-row">
-                <span className="o2c-data-label">Value:</span>
-                <span className="o2c-data-value">{orderData.order_value.toLocaleString()} {orderData.currency}</span>
-              </div>
-              <button
-                className="o2c-button o2c-button-primary"
-                onClick={() => handleUpdateProgress(25)}
-                disabled={loading}
-              >
-                {loading ? 'Confirming...' : 'Confirm Order'}
-              </button>
             </div>
           )}
 
-          {orderData && currentStep >= 2 && (
-            <div className="o2c-card">
-              <h3 className="o2c-card-title">
-                <TrendingUp size={24} />
-                GL Posting Impact
-              </h3>
-              {glPostings.length > 0 ? (
-                <table className="o2c-gl-table">
-                  <thead>
-                    <tr>
-                      <th>Account</th>
-                      <th>Type</th>
-                      <th>Amount</th>
-                      <th>Description</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {glPostings.map((posting, idx) => (
-                      <tr key={idx}>
-                        <td>{posting.account}</td>
-                        <td>{posting.type}</td>
-                        <td>€{posting.amount.toLocaleString()}</td>
-                        <td>{posting.description}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              ) : (
-                <div className="o2c-loading">No GL postings yet</div>
-              )}
-            </div>
-          )}
+          {/* Line Items Tab */}
+          {activeTab === 'lineitems' && (
+            <div>
+              <div className="o2c-card">
+                <h2 className="o2c-card-title">
+                  <Package size={24} />
+                  Solution Order Line Items
+                </h2>
 
-          {orderData && currentStep >= 4 && (
-            <div className="o2c-card">
-              <h3 className="o2c-card-title">
-                <BarChart3 size={24} />
-                AR Aging & Dunning
-              </h3>
-              {arAging.length > 0 ? (
-                <table className="o2c-gl-table">
-                  <thead>
-                    <tr>
-                      <th>Bucket</th>
-                      <th>Days</th>
-                      <th>Amount</th>
-                      <th>Level</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {arAging.map((bucket, idx) => (
-                      <tr key={idx}>
-                        <td>{bucket.bucket}</td>
-                        <td>{bucket.days_overdue}</td>
-                        <td>€{bucket.amount.toLocaleString()}</td>
-                        <td>{bucket.dunning_level}</td>
-                        <td>{bucket.next_action}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              ) : (
-                <div className="o2c-loading">No AR aging data yet</div>
-              )}
-            </div>
-          )}
-
-          {orderData && currentStep >= 5 && (
-            <div className="o2c-card">
-              <h3 className="o2c-card-title" style={{ color: '#107E3E' }}>
-                ✓ Process Complete
-              </h3>
-              <p style={{ fontSize: '0.875rem', color: '#666666', marginBottom: '1.5rem' }}>
-                Order {orderData.order_number} has successfully progressed through all O2C steps. Export the configuration as a SAP Solution Builder template to deploy this flow in your S/4HANA landscape.
-              </p>
-              <button
-                className="o2c-button o2c-button-primary"
-                onClick={async () => {
-                  setLoading(true);
-                  try {
-                    const res = await fetch(`${API_BASE}/orders/${orderData.order_number}/export/download`, {
-                      method: 'POST',
-                    });
-                    if (res.ok) {
-                      const blob = await res.blob();
-                      const url = window.URL.createObjectURL(blob);
-                      const a = document.createElement('a');
-                      a.href = url;
-                      a.download = `O2C-SolutionBuilder-${orderData.order_number}.xml`;
-                      document.body.appendChild(a);
-                      a.click();
-                      window.URL.revokeObjectURL(url);
-                      document.body.removeChild(a);
-                    } else {
-                      setError('Failed to download Solution Builder export');
-                    }
-                  } catch (err) {
-                    setError(`Export error: ${err}`);
-                  } finally {
-                    setLoading(false);
-                  }
-                }}
-                disabled={loading}
-                style={{ width: '100%', marginTop: '1rem' }}
-              >
-                {loading ? 'Exporting...' : '⬇ Export as Solution Builder XML'}
-              </button>
-            </div>
-          )}
-        </div>
-
-        <aside className="o2c-sidebar">
-          {orderData && (
-            <>
-              <div className="o2c-sidebar-panel">
-                <h4 className="o2c-sidebar-title">Order Summary</h4>
-                <div className="o2c-kpi-card">
-                  <span className="o2c-kpi-label">Order Value</span>
-                  <span className="o2c-kpi-value">{orderData.order_value.toLocaleString()}</span>
-                  <span style={{ fontSize: '0.75rem', color: '#666666' }}>{orderData.currency}</span>
-                </div>
-              </div>
-
-              <div className="o2c-sidebar-panel">
-                <h4 className="o2c-sidebar-title">Process Status</h4>
-                <div className="o2c-data-row">
-                  <span className="o2c-data-label">Step:</span>
-                  <span className="o2c-data-value">{currentStep + 1} of 6</span>
-                </div>
-                <div className="o2c-data-row">
-                  <span className="o2c-data-label">Progress:</span>
-                  <span className="o2c-data-value">{Math.round(((currentStep + 1) / 6) * 100)}%</span>
-                </div>
-                <div style={{ marginTop: '1rem' }}>
-                  <button
-                    className="o2c-button o2c-button-primary"
-                    onClick={() => handleUpdateProgress(Math.min(100, (currentStep + 1) * 20))}
-                    disabled={loading || currentStep >= 5}
-                    style={{ marginTop: 0, width: '100%' }}
-                  >
-                    Next Step
-                  </button>
-                </div>
-              </div>
-
-              <div className="o2c-sidebar-panel">
-                <h4 className="o2c-sidebar-title">Revenue Recognition</h4>
-                <div className="o2c-data-row">
-                  <span className="o2c-data-label">Completion:</span>
-                  <span className="o2c-data-value">{orderData.completion_percentage}%</span>
-                </div>
-                <div className="o2c-data-row">
-                  <span className="o2c-data-label">Recognized:</span>
-                  <span className="o2c-data-value">
-                    €{(orderData.order_value * (orderData.completion_percentage / 100)).toLocaleString()}
-                  </span>
-                </div>
-              </div>
-
-              <div className="o2c-sidebar-panel" style={{ backgroundColor: '#E3F2FD', borderLeft: '4px solid #0066CC' }}>
-                <h4 className="o2c-sidebar-title" style={{ color: '#0066CC', marginBottom: '0.75rem' }}>SAP Config — Step {currentStep + 1}</h4>
-                <div style={{ fontSize: '0.8rem', color: '#333333', lineHeight: '1.5' }}>
-                  {currentStep === 0 && (
-                    <>
-                      <div><strong>Create SO (Sales Order)</strong></div>
-                      <div style={{ fontSize: '0.75rem', color: '#666666', marginTop: '0.5rem' }}>
-                        <div>• TXN: VA01 (Create SO)</div>
-                        <div>• Module: SD (Sales & Distribution)</div>
-                        <div>• Config: Order Type determination rules</div>
-                        <div>• Master: Customer, Material, Pricing</div>
+                {selectedOrder.line_items.map((item) => (
+                  <div key={item.line_number} className="o2c-line-item">
+                    <div className="o2c-line-item-header">
+                      <div>
+                        <div className="o2c-line-item-title">
+                          Line {item.line_number}: {item.product_name}
+                        </div>
+                        <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.25rem' }}>
+                          {item.product_code}
+                        </div>
                       </div>
-                    </>
-                  )}
-                  {currentStep === 1 && (
-                    <>
-                      <div><strong>Contract Linkage & Confirmation</strong></div>
-                      <div style={{ fontSize: '0.75rem', color: '#666666', marginTop: '0.5rem' }}>
-                        <div>• TXN: VA01 (Edit SO)</div>
-                        <div>• Module: SD + CRM (Contract mgmt)</div>
-                        <div>• Ref: FARR_CONTRACT (RAR module)</div>
-                        <div>• Link: Old/New contract for renewals</div>
+                      <div className="o2c-line-item-badge">
+                        {item.billing_model === 'one-time' ? '💰 One-Time' : item.billing_model === 'recurring' ? '📅 Recurring' : '🎯 Milestone'}
                       </div>
-                    </>
-                  )}
-                  {currentStep === 2 && (
-                    <>
-                      <div><strong>Invoice Generation</strong></div>
-                      <div style={{ fontSize: '0.75rem', color: '#666666', marginTop: '0.5rem' }}>
-                        <div>• TXN: VF01 (Create Invoice)</div>
-                        <div>• Module: FI-AR (Accounts Receivable)</div>
-                        <div>• Config: Billing plan, Invoice layout</div>
-                        <div>• Output: FB01 (FI posting)</div>
-                      </div>
-                    </>
-                  )}
-                  {currentStep === 3 && (
-                    <>
-                      <div><strong>Revenue Recognition (IFRS 15)</strong></div>
-                      <div style={{ fontSize: '0.75rem', color: '#666666', marginTop: '0.5rem' }}>
-                        <div>• TXN: FARR_IMG (RAR Config)</div>
-                        <div>• Module: RAR (Revenue Accounting)</div>
-                        <div>• PBO: Performance Obligation setup</div>
-                        <div>• Rules: BRFplus for % logic</div>
-                      </div>
-                    </>
-                  )}
-                  {currentStep === 4 && (
-                    <>
-                      <div><strong>AR Aging & Dunning</strong></div>
-                      <div style={{ fontSize: '0.75rem', color: '#666666', marginTop: '0.5rem' }}>
-                        <div>• TXN: F150 (Dunning Run)</div>
-                        <div>• Module: FI-AR (AR management)</div>
-                        <div>• Config: Dunning levels (0-3)</div>
-                        <div>• Late Fees: €200 (L2), €500 (L3)</div>
-                      </div>
-                    </>
-                  )}
-                  {currentStep === 5 && (
-                    <>
-                      <div><strong>GL Posting & Reconciliation</strong></div>
-                      <div style={{ fontSize: '0.75rem', color: '#666666', marginTop: '0.5rem' }}>
-                        <div>• TXN: FB01 (GL Posting)</div>
-                        <div>• Module: FI (General Ledger)</div>
-                        <div>• Accounts: 1200 (A/R), 4000 (Rev)</div>
-                        <div>• Auto-posting: Posting Control rules</div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            </>
-          )}
+                    </div>
 
-          {scenarios.length > 0 && (
-            <div className="o2c-sidebar-panel">
-              <h4 className="o2c-sidebar-title">Available Scenarios</h4>
-              <div style={{ fontSize: '0.85rem', color: '#666666' }}>
-                {scenarios.map((scenario) => (
-                  <div key={scenario.id} style={{ marginBottom: '0.75rem', paddingBottom: '0.75rem', borderBottom: '1px solid #F5F5F5' }}>
-                    <strong>{scenario.name}</strong>
-                    <div style={{ fontSize: '0.75rem', color: '#999' }}>€{scenario.total_value.toLocaleString()}</div>
+                    <div className="o2c-line-item-details">
+                      <div className="o2c-detail-row">
+                        <span className="o2c-detail-label">Quantity:</span>
+                        <span className="o2c-detail-value">{item.quantity}</span>
+                      </div>
+                      <div className="o2c-detail-row">
+                        <span className="o2c-detail-label">Unit Price:</span>
+                        <span className="o2c-detail-value">${item.unit_price.toLocaleString()}</span>
+                      </div>
+                      <div className="o2c-detail-row">
+                        <span className="o2c-detail-label">Total Price:</span>
+                        <span className="o2c-detail-value">${item.total_price.toLocaleString()}</span>
+                      </div>
+                      <div className="o2c-detail-row">
+                        <span className="o2c-detail-label">Billing:</span>
+                        <span className="o2c-detail-value">{item.billing_frequency || item.billing_model}</span>
+                      </div>
+
+                      <div className="o2c-detail-row" style={{ gridColumn: '1 / -1' }}>
+                        <span className="o2c-detail-label">Performance Obligation:</span>
+                        <span className="o2c-detail-value">{item.performance_obligation}</span>
+                      </div>
+
+                      <div className="o2c-detail-row" style={{ gridColumn: '1 / -1' }}>
+                        <span className="o2c-detail-label">Revenue Recognition Trigger:</span>
+                        <span className="o2c-detail-value">{item.revenue_recognition_trigger}</span>
+                      </div>
+
+                      <div className="o2c-detail-row">
+                        <span className="o2c-detail-label">Revenue Recognized:</span>
+                        <span className="o2c-detail-value">${item.revenue_amount.toLocaleString()}</span>
+                      </div>
+
+                      <div className="o2c-detail-row">
+                        <span className="o2c-detail-label">Deferred:</span>
+                        <span className="o2c-detail-value">${item.deferred_amount.toLocaleString()}</span>
+                      </div>
+
+                      <div className="o2c-detail-row" style={{ gridColumn: '1 / -1' }}>
+                        <span className="o2c-detail-label">Target Sales Order Type:</span>
+                        <span className="o2c-detail-value">{item.target_sales_order_type}</span>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
           )}
-        </aside>
+
+          {/* Workflow Tab */}
+          {activeTab === 'workflow' && (
+            <div>
+              <div className="o2c-card">
+                <h2 className="o2c-card-title">
+                  <Clock size={24} />
+                  Order-to-Cash Workflow
+                </h2>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">📝 Step 1: Solution Order Creation</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#107E3E', marginTop: '0.5rem' }}>
+                      ZORD-2026-0415-001 Created
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      • Contract established with Acme Corp
+                      <br />• 3 distinct line items registered
+                      <br />• Total contract value: $830K
+                      <br />• Deferred revenue liability: $480K
+                    </div>
+                  </div>
+
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">📤 Step 2: Item Routing & Sales Order Generation</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#107E3E', marginTop: '0.5rem' }}>
+                      3 Sales Orders Created
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      • SO-2026-001567 (Perpetual License)
+                      <br />• SO-2026-001568 (SaaS 36-month Subscription)
+                      <br />• SO-2026-001569 (Implementation Services)
+                    </div>
+                  </div>
+
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">💳 Step 3: Billing & AR Creation</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#0A6ED4', marginTop: '0.5rem' }}>
+                      AR: $830,000
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      • Customer invoice issued (Acme Corp)
+                      <br />• AR account 100001 debited: $830K
+                      <br />• Deferred Revenue account 250001 credited: $480K
+                      <br />• Immediate revenue accounts credited: $350K
+                    </div>
+                  </div>
+
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">📊 Step 4: Revenue Recognition & GL Posting</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#107E3E', marginTop: '0.5rem' }}>
+                      Multi-Trigger Recognition
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      • License: $500K recognized at go-live (performance obligation satisfied)
+                      <br />• SaaS: $5K/month recognized (recurring obligation)
+                      <br />• Services: Milestone-based recognition ($37.5K per phase)
+                      <br />• GL Posting to revenue accounts (4000xx series)
+                    </div>
+                  </div>
+
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">💰 Step 5: Collections & AR Aging</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#107E3E', marginTop: '0.5rem' }}>
+                      Payment Tracking Active
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      • Monitor AR aging: Current / 30-60 days / 60+ days
+                      <br />• Apply payments to invoice
+                      <br />• Dunning management for overdue amounts
+                      <br />• Cash application to GL
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Sidebar */}
+        <div className="o2c-sidebar">
+          <div className="o2c-sidebar-card">
+            <div className="o2c-status-badge">🟢 ACTIVE</div>
+            <div className="o2c-sidebar-title">Solution Order Details</div>
+
+            <div className="o2c-info-item">
+              <div className="o2c-info-label">Order ID</div>
+              <div className="o2c-info-value">{selectedOrder.solution_order_id}</div>
+            </div>
+
+            <div className="o2c-info-item">
+              <div className="o2c-info-label">Customer</div>
+              <div className="o2c-info-value">{selectedOrder.customer_name}</div>
+            </div>
+
+            <div className="o2c-info-item">
+              <div className="o2c-info-label">Customer ID</div>
+              <div className="o2c-info-value">{selectedOrder.customer_id}</div>
+            </div>
+
+            <div className="o2c-info-item">
+              <div className="o2c-info-label">Contract Date</div>
+              <div className="o2c-info-value">{selectedOrder.contract_date}</div>
+            </div>
+
+            <div className="o2c-info-item">
+              <div className="o2c-info-label">Currency</div>
+              <div className="o2c-info-value">{selectedOrder.currency}</div>
+            </div>
+          </div>
+
+          <div className="o2c-sidebar-card">
+            <div className="o2c-sidebar-title">💡 Key Concepts</div>
+
+            <div style={{ fontSize: '0.85rem', lineHeight: '1.6', color: isDarkMode ? '#b0bec5' : '#666666' }}>
+              <strong style={{ color: isDarkMode ? '#ffffff' : '#000000' }}>Solution Order</strong> is a master container for multiple line items with different billing and revenue models.
+
+              <br /><br />
+
+              <strong style={{ color: isDarkMode ? '#ffffff' : '#000000' }}>Item Routing</strong> directs each line to the appropriate Sales Order type:
+              <br />• One-time items → OR (Sales Order)
+              <br />• Recurring → OR with subscription
+              <br />• Services → ZS (Service Order)
+
+              <br /><br />
+
+              <strong style={{ color: isDarkMode ? '#ffffff' : '#000000' }}>Revenue Recognition</strong> follows IFRS 15 based on performance obligation satisfaction.
+            </div>
+          </div>
+
+          <div className="o2c-sidebar-card">
+            <div className="o2c-sidebar-title">📈 GL Impact</div>
+
+            <div className="o2c-info-item">
+              <div className="o2c-info-label">AR (100001)</div>
+              <div className="o2c-info-value" style={{ color: '#0A6ED4' }}>
+                +${selectedOrder.total_contract_value.toLocaleString()}
+              </div>
+            </div>
+
+            <div className="o2c-info-item">
+              <div className="o2c-info-label">Deferred Revenue (250001)</div>
+              <div className="o2c-info-value" style={{ color: '#E17B08' }}>
+                +${selectedOrder.total_deferred_revenue.toLocaleString()}
+              </div>
+            </div>
+
+            <div className="o2c-info-item">
+              <div className="o2c-info-label">Immediate Revenue</div>
+              <div className="o2c-info-value" style={{ color: '#107E3E' }}>
+                +${(selectedOrder.total_contract_value - selectedOrder.total_deferred_revenue).toLocaleString()}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default O2COrchestrator;
