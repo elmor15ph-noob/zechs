@@ -396,261 +396,10 @@ const RealtimeS4HANASimulator: React.FC<RealtimeS4HANASimulatorProps> = ({ isDar
 
     ${createFioriStyles(isDarkMode)}
 
-    .realtime-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-bottom: 1rem;
-      border-bottom: 2px solid ${isDarkMode ? '#2a4a6a' : '#e2e8f0'};
-    }
-
-    .realtime-header h1 {
-      margin: 0;
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: ${isDarkMode ? '#00d4ff' : '#ff5722'};
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .realtime-controls {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .control-button {
-      padding: 0.75rem 1.25rem;
-      border: none;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: all 0.2s;
-      background: ${isDarkMode ? '#1a3a52' : '#f8fafc'};
-      color: ${isDarkMode ? '#00d4ff' : '#ff5722'};
-      border: 1px solid ${isDarkMode ? '#00d4ff' : '#ff5722'};
-    }
-
-    .control-button:hover {
-      background: ${isDarkMode ? '#00d4ff' : '#ff5722'};
-      color: ${isDarkMode ? '#0f1620' : '#ffffff'};
-      transform: translateY(-2px);
-    }
-
-    .speed-control {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: ${isDarkMode ? '#1a2a3a' : '#f5f5f5'};
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      border: 1px solid ${isDarkMode ? '#2a4a6a' : '#e2e8f0'};
-    }
-
-    .speed-button {
-      padding: 0.4rem 0.8rem;
-      border: none;
-      border-radius: 4px;
-      background: ${isDarkMode ? '#2a3a4a' : '#e2e8f0'};
-      color: ${isDarkMode ? '#94a3b8' : '#64748b'};
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-weight: 600;
-      transition: all 0.2s;
-    }
-
-    .speed-button.active {
-      background: ${isDarkMode ? '#00d4ff' : '#ff5722'};
-      color: ${isDarkMode ? '#0f1620' : '#ffffff'};
-    }
-
-    .speed-button:hover {
-      background: ${isDarkMode ? '#00d4ff' : '#ff5722'};
-      color: ${isDarkMode ? '#0f1620' : '#ffffff'};
-    }
-
-    .progress-container {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    .progress-bar-container {
-      flex: 1;
-      height: 12px;
-      background: ${isDarkMode ? '#1a2a3a' : '#f0f0f0'};
-      border-radius: 6px;
-      overflow: hidden;
-      border: 1px solid ${isDarkMode ? '#2a4a6a' : '#e2e8f0'};
-    }
-
-    .progress-bar {
-      height: 100%;
-      background: linear-gradient(90deg, #00d4ff 0%, #10b981 100%);
-      transition: width 0.3s ease;
-      width: ${progress}%;
-    }
-
-    .progress-text {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: ${isDarkMode ? '#a0b0c0' : '#64748b'};
-      min-width: 80px;
-      text-align: right;
-    }
-
-    .module-flow {
-      display: flex;
-      gap: 1rem;
-      padding: 1.5rem;
-      background: ${isDarkMode ? '#1a2a3a' : '#f8fafc'};
-      border-radius: 8px;
-      border: 1px solid ${isDarkMode ? '#2a4a6a' : '#e2e8f0'};
-      margin-bottom: 1rem;
-      align-items: center;
-    }
-
-    .module-box {
-      flex: 1;
-      padding: 1rem;
-      border-radius: 6px;
-      text-align: center;
-      border: 2px solid;
-      transition: all 0.3s;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    .module-box.inactive {
-      border-color: ${isDarkMode ? '#2a4a6a' : '#cbd5e0'};
-      background: ${isDarkMode ? '#0f1620' : '#f5f5f5'};
-      color: ${isDarkMode ? '#64748b' : '#94a3b8'};
-      opacity: 0.5;
-    }
-
-    .module-box.active {
-      border-color: currentColor;
-      background: ${isDarkMode ? 'rgba(0, 212, 255, 0.1)' : 'rgba(255, 107, 53, 0.1)'};
-      color: var(--module-color);
-    }
-
-    .module-arrow {
-      font-size: 1.5rem;
-      color: ${isDarkMode ? '#64748b' : '#cbd5e0'};
-    }
-
-    .transaction-timeline {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .transaction-card {
-      padding: 1.25rem;
-      background: ${isDarkMode ? '#1a2a3a' : '#f8fafc'};
-      border: 2px solid ${isDarkMode ? '#2a4a6a' : '#e2e8f0'};
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .transaction-card:hover {
-      border-color: ${isDarkMode ? '#00d4ff' : '#ff5722'};
-      background: ${isDarkMode ? 'rgba(0, 212, 255, 0.05)' : 'rgba(255, 107, 53, 0.05)'};
-      transform: translateY(-2px);
-    }
-
-    .transaction-card.active {
-      border-color: ${isDarkMode ? '#00d4ff' : '#ff5722'};
-      background: ${isDarkMode ? 'rgba(0, 212, 255, 0.15)' : 'rgba(255, 107, 53, 0.15)'};
-      box-shadow: 0 0 20px ${isDarkMode ? 'rgba(0, 212, 255, 0.3)' : 'rgba(255, 107, 53, 0.3)'};
-    }
-
-    .transaction-card.completed {
-      opacity: 0.7;
-    }
-
-    .transaction-status {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.75rem;
-      font-weight: 700;
-    }
-
-    .transaction-status.pending {
-      background: ${isDarkMode ? '#2a4a6a' : '#e2e8f0'};
-      color: ${isDarkMode ? '#94a3b8' : '#64748b'};
-    }
-
-    .transaction-status.executing {
-      background: #ff5722;
-      color: #ffffff;
-      animation: pulse-animation 1s infinite;
-    }
-
-    .transaction-status.completed {
-      background: #10b981;
-      color: #ffffff;
-    }
-
-    @keyframes pulse-animation {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.6; }
-    }
-
-    .transaction-code {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: ${isDarkMode ? '#00d4ff' : '#ff5722'};
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .transaction-name {
-      font-weight: 700;
-      font-size: 1rem;
-      margin: 0.5rem 0;
-      padding-right: 2rem;
-    }
-
-    .transaction-description {
-      font-size: 0.85rem;
-      color: ${isDarkMode ? '#a0b0c0' : '#64748b'};
-      line-height: 1.5;
-      margin-bottom: 0.75rem;
-    }
-
-    .transaction-module {
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      background: rgba(0, 212, 255, 0.2);
-      color: ${isDarkMode ? '#00d4ff' : '#ff5722'};
-    }
-
     .transaction-details {
       margin-top: 1rem;
       padding-top: 1rem;
-      border-top: 1px solid ${isDarkMode ? '#2a4a6a' : '#e2e8f0'};
+      border-top: 1px solid ${isDarkMode ? '#404040' : '#F2F2F2'};
       max-height: 1000px;
       overflow: hidden;
       animation: expand-animation 0.3s ease;
@@ -675,22 +424,22 @@ const RealtimeS4HANASimulator: React.FC<RealtimeS4HANASimulatorProps> = ({ isDar
     .detail-section h4 {
       margin: 0.5rem 0 0.25rem 0;
       font-weight: 700;
-      color: ${isDarkMode ? '#00d4ff' : '#ff5722'};
+      color: #0A6ED4;
       font-size: 0.85rem;
     }
 
     .business-impact {
       padding: 0.75rem;
-      background: ${isDarkMode ? 'rgba(16, 185, 129, 0.1)' : 'rgba(16, 185, 129, 0.05)'};
-      border-left: 3px solid #10b981;
+      background: ${isDarkMode ? 'rgba(16, 126, 62, 0.1)' : 'rgba(16, 126, 62, 0.05)'};
+      border-left: 3px solid #107E3E;
       border-radius: 4px;
       font-style: italic;
-      color: ${isDarkMode ? '#a0b0c0' : '#64748b'};
+      color: ${isDarkMode ? '#D0D0D0' : '#666666'};
     }
 
     .gl-posting {
       padding: 0.5rem;
-      background: ${isDarkMode ? '#0f1620' : '#f5f5f5'};
+      background: ${isDarkMode ? '#404040' : '#F8F8F8'};
       border-radius: 3px;
       margin: 0.25rem 0;
       display: flex;
@@ -699,64 +448,24 @@ const RealtimeS4HANASimulator: React.FC<RealtimeS4HANASimulatorProps> = ({ isDar
       font-family: 'Courier New', monospace;
     }
 
-    .gl-account-dashboard {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1rem;
-      margin-top: 1.5rem;
-    }
-
-    .gl-account-card {
-      padding: 1.25rem;
-      background: ${isDarkMode ? '#1a2a3a' : '#f8fafc'};
-      border: 1px solid ${isDarkMode ? '#2a4a6a' : '#e2e8f0'};
-      border-radius: 8px;
-      transition: all 0.3s;
-    }
-
-    .gl-account-card.flashing {
-      background: ${isDarkMode ? '#1a3a52' : '#fef3c7'};
-      border-color: ${isDarkMode ? '#00d4ff' : '#ff5722'};
-      box-shadow: 0 0 15px ${isDarkMode ? 'rgba(0, 212, 255, 0.3)' : 'rgba(255, 107, 53, 0.2)'};
-    }
-
     .gl-account-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       margin-bottom: 0.75rem;
       padding-bottom: 0.75rem;
-      border-bottom: 1px solid ${isDarkMode ? '#2a4a6a' : '#e2e8f0'};
-    }
-
-    .gl-account-number {
-      font-weight: 700;
-      font-size: 0.85rem;
-      color: ${isDarkMode ? '#00d4ff' : '#ff5722'};
-      font-family: 'Courier New', monospace;
+      border-bottom: 1px solid ${isDarkMode ? '#404040' : '#F2F2F2'};
     }
 
     .gl-account-description {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 600;
-      color: ${isDarkMode ? '#e0e8f0' : '#1a1a1a'};
-    }
-
-    .gl-account-balance {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: ${isDarkMode ? '#10b981' : '#059669'};
-      font-family: 'Courier New', monospace;
-      letter-spacing: 0.5px;
-    }
-
-    .gl-account-balance.negative {
-      color: ${isDarkMode ? '#f87171' : '#dc2626'};
+      color: ${isDarkMode ? '#FFFFFF' : '#333333'};
     }
 
     .gl-account-postings {
       font-size: 0.75rem;
-      color: ${isDarkMode ? '#64748b' : '#94a3b8'};
+      color: ${isDarkMode ? '#999999' : '#999999'};
       margin-top: 0.5rem;
       max-height: 60px;
       overflow-y: auto;
@@ -769,44 +478,36 @@ const RealtimeS4HANASimulator: React.FC<RealtimeS4HANASimulatorProps> = ({ isDar
       text-overflow: ellipsis;
     }
 
-    .summary-section {
-      padding: 1.5rem;
-      background: ${isDarkMode ? '#1a2a3a' : '#f8fafc'};
-      border: 1px solid ${isDarkMode ? '#2a4a6a' : '#e2e8f0'};
-      border-radius: 8px;
-      margin-top: 1.5rem;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .summary-item {
+    .speed-control {
       display: flex;
-      flex-direction: column;
+      align-items: center;
       gap: 0.5rem;
+      background: ${isDarkMode ? '#2D2D2D' : '#F8F8F8'};
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      border: 1px solid ${isDarkMode ? '#404040' : '#F2F2F2'};
     }
 
-    .summary-label {
+    .speed-button {
+      padding: 0.4rem 0.8rem;
+      border: none;
+      border-radius: 4px;
+      background: ${isDarkMode ? '#404040' : '#F2F2F2'};
+      color: ${isDarkMode ? '#999999' : '#666666'};
+      cursor: pointer;
       font-size: 0.85rem;
       font-weight: 600;
-      color: ${isDarkMode ? '#a0b0c0' : '#64748b'};
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      transition: all 0.2s;
     }
 
-    .summary-value {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: ${isDarkMode ? '#00d4ff' : '#ff5722'};
-      font-family: 'Courier New', monospace;
+    .speed-button.active {
+      background: #0A6ED4;
+      color: #FFFFFF;
     }
 
-    .dark-mode {
-      color: #e0e8f0;
-    }
-
-    .light-mode {
-      color: #1a1a1a;
+    .speed-button:hover {
+      background: #0A6ED4;
+      color: #FFFFFF;
     }
   `;
 
