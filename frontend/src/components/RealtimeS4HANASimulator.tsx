@@ -266,7 +266,7 @@ const RealtimeS4HANASimulator: React.FC<RealtimeS4HANASimulatorProps> = ({ isDar
 
   const modules = [
     { id: 'O2C', name: 'Order-to-Cash', color: '#00d4ff' },
-    { id: 'S2R', name: 'Source-to-Record', color: '#ff5722' },
+    { id: 'S2R', name: 'Source-to-Record', color: '#0A6ED4' },
     { id: 'R2R', name: 'Record-to-Report', color: '#10b981' },
     { id: 'FI', name: 'Finance', color: '#8b5cf6' },
   ];
@@ -434,7 +434,7 @@ const RealtimeS4HANASimulator: React.FC<RealtimeS4HANASimulatorProps> = ({ isDar
       border-left: 3px solid #107E3E;
       border-radius: 4px;
       font-style: italic;
-      color: ${isDarkMode ? '#D0D0D0' : '#666666'};
+      color: ${isDarkMode ? '#D0D0D0' : '#333333'};
     }
 
     .gl-posting {
@@ -465,7 +465,7 @@ const RealtimeS4HANASimulator: React.FC<RealtimeS4HANASimulatorProps> = ({ isDar
 
     .gl-account-postings {
       font-size: 0.75rem;
-      color: ${isDarkMode ? '#999999' : '#999999'};
+      color: ${isDarkMode ? '#999999' : '#333333'};
       margin-top: 0.5rem;
       max-height: 60px;
       overflow-y: auto;
@@ -486,6 +486,7 @@ const RealtimeS4HANASimulator: React.FC<RealtimeS4HANASimulatorProps> = ({ isDar
       padding: 0.5rem 1rem;
       border-radius: 4px;
       border: 1px solid ${isDarkMode ? '#404040' : '#F2F2F2'};
+      color: ${isDarkMode ? '#b0bec5' : '#333333'};
     }
 
     .speed-button {
@@ -493,7 +494,7 @@ const RealtimeS4HANASimulator: React.FC<RealtimeS4HANASimulatorProps> = ({ isDar
       border: none;
       border-radius: 4px;
       background: ${isDarkMode ? '#404040' : '#F2F2F2'};
-      color: ${isDarkMode ? '#999999' : '#666666'};
+      color: ${isDarkMode ? '#999999' : '#1a1a1a'};
       cursor: pointer;
       font-size: 0.85rem;
       font-weight: 600;
@@ -582,7 +583,7 @@ const RealtimeS4HANASimulator: React.FC<RealtimeS4HANASimulatorProps> = ({ isDar
             className={`transaction-card ${idx === currentStep ? 'active' : ''} ${completedTransactions.includes(idx) ? 'completed' : ''}`}
             onClick={() => handleTransactionClick(idx)}
           >
-            <div className="transaction-status" style={{ background: idx < currentStep ? '#10b981' : idx === currentStep ? '#ff5722' : '#2a4a6a' }}>
+            <div className="transaction-status" style={{ background: idx < currentStep ? '#10b981' : idx === currentStep ? '#0A6ED4' : '#2a4a6a' }}>
               {idx < currentStep ? '✓' : idx === currentStep ? '▶' : idx + 1}
             </div>
 
@@ -639,7 +640,7 @@ const RealtimeS4HANASimulator: React.FC<RealtimeS4HANASimulatorProps> = ({ isDar
         ))}
       </div>
 
-      <h2 style={{ marginTop: '2rem', marginBottom: '1rem', color: isDarkMode ? '#00d4ff' : '#ff5722', fontSize: '1.5rem', fontWeight: '700' }}>
+      <h2 style={{ marginTop: '2rem', marginBottom: '1rem', color: isDarkMode ? '#00d4ff' : '#0A6ED4', fontSize: '1.5rem', fontWeight: '700' }}>
         Live GL Account Dashboard
       </h2>
 

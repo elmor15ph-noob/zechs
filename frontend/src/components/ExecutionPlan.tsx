@@ -53,7 +53,7 @@ const executionData = {
     {
       week: 2,
       title: 'Build Phase 1 Completion (P2P Module)',
-      color: '#ff6b35',
+      color: '#0A6ED4',
       tasks: [
         {
           id: 'w2-t1',
@@ -544,7 +544,7 @@ export default function ExecutionPlan({ isDarkMode = true }: ExecutionPlanProps)
     <div className={`execution-plan-container ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
       {/* Header */}
       <div className="execution-header">
-        <Target size={32} color={isDarkMode ? '#00d4ff' : '#ff6b35'} />
+        <Target size={32} color={isDarkMode ? '#00d4ff' : '#0A6ED4'} />
         <div>
           <h1>{executionData.title}</h1>
           <p>{executionData.subtitle}</p>
@@ -569,7 +569,7 @@ export default function ExecutionPlan({ isDarkMode = true }: ExecutionPlanProps)
         <h2 style={{ margin: '1rem 0 0.5rem 0', fontSize: '1.2rem' }}>🔥 Immediate Actions (Today)</h2>
         <div className="immediate-actions">
           {executionData.immediateActions.map((item, idx) => (
-            <div key={idx} className="action-card" style={{ borderColor: isDarkMode ? '#ff6b35' : '#ff6b35' }}>
+            <div key={idx} className="action-card" style={{ borderColor: isDarkMode ? '#0A6ED4' : '#0A6ED4' }}>
               <strong>{item.action}</strong>
               <div className="action-deadline">Due: {item.deadline}</div>
               <div style={{ fontSize: '0.85rem' }}>{item.priority}</div>
@@ -677,7 +677,7 @@ export default function ExecutionPlan({ isDarkMode = true }: ExecutionPlanProps)
         marginTop: '2rem',
       }}>
         <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
-          <AlertCircle size={20} color={isDarkMode ? '#00d4ff' : '#ff6b35'} style={{ flexShrink: 0, marginTop: '2px' }} />
+          <AlertCircle size={20} color={isDarkMode ? '#00d4ff' : '#0A6ED4'} style={{ flexShrink: 0, marginTop: '2px' }} />
           <div>
             <strong>Click tasks to mark as complete</strong>
             <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.9rem', opacity: 0.8 }}>

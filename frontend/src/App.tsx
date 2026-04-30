@@ -131,7 +131,7 @@ function App() {
           <div className="header-content">
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexDirection: 'column', alignItems: 'flex-start' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <Brain size={32} color={isDarkMode ? '#00d4ff' : '#ff5722'} />
+                <Brain size={32} color={'#0A6ED4'} />
                 <div>
                   <h1>ZECHS</h1>
                   <p className="header-subtitle">Zentai Enterprise Consulting & Holistic Solutions</p>
@@ -139,7 +139,7 @@ function App() {
               </div>
               {health && (
                 <div className="health-status">
-                  <CheckCircle size={16} color={isDarkMode ? '#00d4ff' : '#ff5722'} />
+                  <CheckCircle size={16} color={'#0A6ED4'} />
                   <span>Claude • {health.vault_notes} notes</span>
                 </div>
               )}

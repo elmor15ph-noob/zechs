@@ -59,6 +59,17 @@ export const createFioriStyles = (isDarkMode: boolean) => `
     background: #003D7A;
   }
 
+  .realtime-controls {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem;
+    background: ${isDarkMode ? '#111f2e' : '#FFFFFF'};
+    border: 1px solid ${isDarkMode ? '#1a2a3a' : '#F2F2F2'};
+    border-radius: 4px;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.08);
+  }
+
   .progress-bar-container {
     flex: 1;
     height: 8px;
@@ -71,6 +82,18 @@ export const createFioriStyles = (isDarkMode: boolean) => `
     height: 100%;
     background: linear-gradient(90deg, #0A6ED4 0%, #107E3E 100%);
     transition: width 0.3s ease;
+  }
+
+  .progress-text {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: ${isDarkMode ? '#b0bec5' : '#333333'};
+    margin-top: 0.5rem;
+  }
+
+  .progress-container {
+    display: flex;
+    flex-direction: column;
   }
 
   .module-flow {
@@ -97,10 +120,10 @@ export const createFioriStyles = (isDarkMode: boolean) => `
   }
 
   .module-box.inactive {
-    border-color: ${isDarkMode ? '#1a2a3a' : '#F2F2F2'};
-    background: ${isDarkMode ? '#0a1929' : '#F8F8F8'};
-    color: ${isDarkMode ? '#999999' : '#999999'};
-    opacity: 0.5;
+    border-color: ${isDarkMode ? '#1a2a3a' : '#E0E0E0'};
+    background: ${isDarkMode ? '#0a1929' : '#F5F5F5'};
+    color: ${isDarkMode ? '#999999' : '#1a1a1a'};
+    opacity: 1;
   }
 
   .module-box.active {
@@ -157,7 +180,7 @@ export const createFioriStyles = (isDarkMode: boolean) => `
 
   .transaction-description {
     font-size: 0.8rem;
-    color: ${isDarkMode ? '#b0bec5' : '#666666'};
+    color: ${isDarkMode ? '#b0bec5' : '#333333'};
     line-height: 1.5;
     margin-bottom: 0.75rem;
   }
@@ -260,7 +283,7 @@ export const createFioriStyles = (isDarkMode: boolean) => `
   .summary-label {
     font-size: 0.8rem;
     font-weight: 600;
-    color: ${isDarkMode ? '#b0bec5' : '#666666'};
+    color: ${isDarkMode ? '#b0bec5' : '#333333'};
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
