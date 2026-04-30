@@ -434,7 +434,7 @@ const RealtimeS4HANASimulator: React.FC<RealtimeS4HANASimulatorProps> = ({ isDar
       border-left: 3px solid #107E3E;
       border-radius: 4px;
       font-style: italic;
-      color: ${isDarkMode ? '#D0D0D0' : '#333333'};
+      color: ${isDarkMode ? '#D0D0D0' : '#000000'};
     }
 
     .gl-posting {
@@ -460,12 +460,12 @@ const RealtimeS4HANASimulator: React.FC<RealtimeS4HANASimulatorProps> = ({ isDar
     .gl-account-description {
       font-size: 0.8rem;
       font-weight: 600;
-      color: ${isDarkMode ? '#FFFFFF' : '#333333'};
+      color: ${isDarkMode ? '#FFFFFF' : '#000000'};
     }
 
     .gl-account-postings {
       font-size: 0.75rem;
-      color: ${isDarkMode ? '#999999' : '#333333'};
+      color: ${isDarkMode ? '#999999' : '#000000'};
       margin-top: 0.5rem;
       max-height: 60px;
       overflow-y: auto;
@@ -482,19 +482,19 @@ const RealtimeS4HANASimulator: React.FC<RealtimeS4HANASimulatorProps> = ({ isDar
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      background: ${isDarkMode ? '#2D2D2D' : '#F8F8F8'};
+      background: ${isDarkMode ? '#2D2D2D' : '#FFFFFF'};
       padding: 0.5rem 1rem;
       border-radius: 4px;
-      border: 1px solid ${isDarkMode ? '#404040' : '#F2F2F2'};
-      color: ${isDarkMode ? '#b0bec5' : '#333333'};
+      border: 1px solid ${isDarkMode ? '#404040' : '#E0E0E0'};
+      color: ${isDarkMode ? '#b0bec5' : '#000000'};
     }
 
     .speed-button {
       padding: 0.4rem 0.8rem;
       border: none;
       border-radius: 4px;
-      background: ${isDarkMode ? '#404040' : '#F2F2F2'};
-      color: ${isDarkMode ? '#999999' : '#1a1a1a'};
+      background: ${isDarkMode ? '#404040' : '#F0F0F0'};
+      color: ${isDarkMode ? '#999999' : '#000000'};
       cursor: pointer;
       font-size: 0.85rem;
       font-weight: 600;

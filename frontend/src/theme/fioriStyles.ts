@@ -87,7 +87,7 @@ export const createFioriStyles = (isDarkMode: boolean) => `
   .progress-text {
     font-size: 0.8rem;
     font-weight: 600;
-    color: ${isDarkMode ? '#b0bec5' : '#333333'};
+    color: ${isDarkMode ? '#b0bec5' : '#000000'};
     margin-top: 0.5rem;
   }
 
@@ -121,8 +121,8 @@ export const createFioriStyles = (isDarkMode: boolean) => `
 
   .module-box.inactive {
     border-color: ${isDarkMode ? '#1a2a3a' : '#E0E0E0'};
-    background: ${isDarkMode ? '#0a1929' : '#F5F5F5'};
-    color: ${isDarkMode ? '#999999' : '#1a1a1a'};
+    background: ${isDarkMode ? '#0a1929' : '#FFFFFF'};
+    color: ${isDarkMode ? '#999999' : '#000000'};
     opacity: 1;
   }
 
@@ -175,12 +175,12 @@ export const createFioriStyles = (isDarkMode: boolean) => `
     font-weight: 700;
     font-size: 0.95rem;
     margin: 0.5rem 0;
-    color: ${isDarkMode ? '#FFFFFF' : '#333333'};
+    color: ${isDarkMode ? '#FFFFFF' : '#000000'};
   }
 
   .transaction-description {
     font-size: 0.8rem;
-    color: ${isDarkMode ? '#b0bec5' : '#333333'};
+    color: ${isDarkMode ? '#b0bec5' : '#000000'};
     line-height: 1.5;
     margin-bottom: 0.75rem;
   }
@@ -283,7 +283,7 @@ export const createFioriStyles = (isDarkMode: boolean) => `
   .summary-label {
     font-size: 0.8rem;
     font-weight: 600;
-    color: ${isDarkMode ? '#b0bec5' : '#333333'};
+    color: ${isDarkMode ? '#b0bec5' : '#000000'};
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
@@ -301,7 +301,7 @@ export const createFioriStyles = (isDarkMode: boolean) => `
   }
 
   .light-mode {
-    color: #333333;
+    color: #000000;
     background: #FFFFFF;
   }
 `;
