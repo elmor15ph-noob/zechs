@@ -419,6 +419,12 @@ const O2COrchestrator: React.FC<{ isDarkMode?: boolean }> = ({ isDarkMode = true
               📦 Line Items
             </button>
             <button
+              className={`o2c-tab ${activeTab === 'lineflows' ? 'active' : ''}`}
+              onClick={() => setActiveTab('lineflows')}
+            >
+              ⚙️ Line Item Flows
+            </button>
+            <button
               className={`o2c-tab ${activeTab === 'workflow' ? 'active' : ''}`}
               onClick={() => setActiveTab('workflow')}
             >
@@ -573,6 +579,349 @@ const O2COrchestrator: React.FC<{ isDarkMode?: boolean }> = ({ isDarkMode = true
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* Line Item Process Flows Tab */}
+          {activeTab === 'lineflows' && (
+            <div>
+              {/* Line 10: License */}
+              <div className="o2c-card">
+                <h2 className="o2c-card-title">
+                  💰 Line 10: Perpetual License ($500K - One-Time)
+                </h2>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {/* Step 1 */}
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">Step 1️⃣ Quote & CPQ</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#0A6ED4', marginTop: '0.5rem' }}>
+                      Salesforce CPQ Quote
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      ✓ Product: S4H-PERPETUAL-ENT
+                      <br />✓ Unit Price: $500,000
+                      <br />✓ Billing Model: One-time
+                      <br />✓ Performance Obligation: License delivery at go-live
+                    </div>
+                  </div>
+
+                  {/* Step 2 */}
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">Step 2️⃣ Solution Order Creation (ZEST)</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#107E3E', marginTop: '0.5rem' }}>
+                      ZORD-2026-0415-001 (Line 10)
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      ✓ Item Category: TAN (Tangible/License)
+                      <br />✓ GL Account: 100001 (AR), 250001 (Deferred Revenue)
+                      <br />✓ Revenue Recognition: At go-live acceptance
+                    </div>
+                  </div>
+
+                  {/* Step 3 */}
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">Step 3️⃣ Item Routing & Sales Order Generation</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#0A6ED4', marginTop: '0.5rem' }}>
+                      SO-2026-001567 (Type: OR - One-Time)
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      ✓ Document Type: OR (Sales Order)
+                      <br />✓ Billing: One-time invoice
+                      <br />✓ Line item quantity: 1
+                      <br />✓ Price: $500,000
+                    </div>
+                  </div>
+
+                  {/* Step 4 */}
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">Step 4️⃣ Billing & AR Creation</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#0A6ED4', marginTop: '0.5rem' }}>
+                      GL Posting (Initial)
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      Dr. 100001 (AR) $500,000
+                      <br />Cr. 250001 (Deferred Revenue) $500,000
+                      <br />✓ Invoice ZORD-2026-0415-001-10 issued
+                    </div>
+                  </div>
+
+                  {/* Step 5 */}
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">Step 5️⃣ Go-Live & Revenue Recognition</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#107E3E', marginTop: '0.5rem' }}>
+                      Revenue Recognized - GO-LIVE TRIGGER
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      Dr. 250001 (Deferred Revenue) $500,000
+                      <br />Cr. 400001 (License Revenue) $500,000
+                      <br />✓ Performance obligation satisfied
+                      <br />✓ Revenue fully recognized
+                    </div>
+                  </div>
+
+                  {/* Step 6 */}
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">Step 6️⃣ Collections & Cash Application</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#107E3E', marginTop: '0.5rem' }}>
+                      Payment Received
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      Dr. 110001 (Cash) $500,000
+                      <br />Cr. 100001 (AR) $500,000
+                      <br />✓ AR closed
+                      <br />✓ Transaction complete
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Line 20: SaaS */}
+              <div className="o2c-card" style={{ marginTop: '2rem' }}>
+                <h2 className="o2c-card-title">
+                  📅 Line 20: SaaS Subscription ($180K - Recurring Monthly)
+                </h2>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {/* Step 1 */}
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">Step 1️⃣ Quote & CPQ (36 Months)</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#0A6ED4', marginTop: '0.5rem' }}>
+                      Salesforce CPQ Quote
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      ✓ Product: S4H-SAAS-36MO
+                      <br />✓ Monthly Price: $5,000
+                      <br />✓ Total: $5,000 × 36 = $180,000
+                      <br />✓ Billing Model: Recurring monthly
+                    </div>
+                  </div>
+
+                  {/* Step 2 */}
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">Step 2️⃣ Solution Order Creation (ZEST)</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#107E3E', marginTop: '0.5rem' }}>
+                      ZORD-2026-0415-001 (Line 20)
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      ✓ Item Category: CBAO (Cloud-Based Ancillary Offering)
+                      <br />✓ Performance Obligation: Monthly service delivery
+                      <br />✓ Revenue Recognition: Monthly triggers
+                    </div>
+                  </div>
+
+                  {/* Step 3 */}
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">Step 3️⃣ Item Routing & Sales Order Generation</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#0A6ED4', marginTop: '0.5rem' }}>
+                      SO-2026-001568 (Type: OR - Subscription)
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      ✓ Document Type: OR (Recurring)
+                      <br />✓ Billing Schedule: Monthly billing for 36 months
+                      <br />✓ Start Date: May 2026 (post go-live)
+                      <br />✓ Monthly Amount: $5,000
+                    </div>
+                  </div>
+
+                  {/* Step 4 */}
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">Step 4️⃣ Initial AR & Deferred Revenue Setup</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#0A6ED4', marginTop: '0.5rem' }}>
+                      GL Posting (Upfront)
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      Dr. 100001 (AR) $180,000
+                      <br />Cr. 250001 (Deferred Revenue - SaaS) $180,000
+                      <br />✓ Total contract value recognized as liability
+                    </div>
+                  </div>
+
+                  {/* Step 5 */}
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">Step 5️⃣ Monthly Revenue Recognition (Repeating 36x)</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#107E3E', marginTop: '0.5rem' }}>
+                      Month 1, 2, 3... 36
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      Dr. 250001 (Deferred Revenue) $5,000
+                      <br />Cr. 400002 (SaaS Revenue) $5,000
+                      <br />✓ Each month: Service delivery performance obligation satisfied
+                      <br />✓ Example: May 2026, June 2026... April 2029
+                    </div>
+                  </div>
+
+                  {/* Step 6 */}
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">Step 6️⃣ Monthly Billing & Collections</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#107E3E', marginTop: '0.5rem' }}>
+                      Recurring Monthly Invoice
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      Dr. 110001 (Cash) $5,000
+                      <br />Cr. 100001 (AR) $5,000
+                      <br />✓ Repeat monthly for 36 months
+                      <br />✓ Total: 36 invoices × $5,000 = $180,000 collected
+                    </div>
+                  </div>
+
+                  {/* Summary */}
+                  <div style={{
+                    padding: '1rem',
+                    background: isDarkMode ? '#1a2a3a' : '#f8f8f8',
+                    borderRadius: '4px',
+                    borderLeft: '4px solid #0A6ED4',
+                    fontSize: '0.85rem',
+                    color: isDarkMode ? '#b0bec5' : '#666666'
+                  }}>
+                    <strong style={{ color: isDarkMode ? '#ffffff' : '#000000' }}>Summary:</strong> This line item generates 36 months of recurring revenue. Each month, $5,000 is recognized as revenue and a new invoice is issued. Deferred revenue decreases monthly as obligations are satisfied.
+                  </div>
+                </div>
+              </div>
+
+              {/* Line 30: Services */}
+              <div className="o2c-card" style={{ marginTop: '2rem' }}>
+                <h2 className="o2c-card-title">
+                  🎯 Line 30: Implementation Services ($150K - Milestone-Based)
+                </h2>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {/* Step 1 */}
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">Step 1️⃣ Quote & CPQ (4 Phases)</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#0A6ED4', marginTop: '0.5rem' }}>
+                      Salesforce CPQ Quote
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      ✓ Product: S4H-IMPL-SERVICES
+                      <br />✓ Total Value: $150,000
+                      <br />✓ Divided into 4 Phases: $37,500 each
+                      <br />✓ Billing: Milestone-based upon phase completion
+                    </div>
+                  </div>
+
+                  {/* Step 2 */}
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">Step 2️⃣ Solution Order Creation (ZEST)</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#107E3E', marginTop: '0.5rem' }}>
+                      ZORD-2026-0415-001 (Line 30)
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      ✓ Item Category: ZSRV (Service - Milestone)
+                      <br />✓ Performance Obligation: Delivery of 4 project phases
+                      <br />✓ Revenue Recognition: Upon phase acceptance
+                    </div>
+                  </div>
+
+                  {/* Step 3 */}
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">Step 3️⃣ Item Routing & Sales Order Generation</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#0A6ED4', marginTop: '0.5rem' }}>
+                      SO-2026-001569 (Type: ZS - Service Order)
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      ✓ Document Type: ZS (Service Order with milestone billing)
+                      <br />✓ Phase 1: Discovery & Assessment ($37,500)
+                      <br />✓ Phase 2: Config & Build ($37,500)
+                      <br />✓ Phase 3: Testing & UAT ($37,500)
+                      <br />✓ Phase 4: Deployment & Go-Live ($37,500)
+                    </div>
+                  </div>
+
+                  {/* Step 4 */}
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">Step 4️⃣ Initial AR & Deferred Revenue Setup</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#0A6ED4', marginTop: '0.5rem' }}>
+                      GL Posting (Upfront)
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      Dr. 100001 (AR) $150,000
+                      <br />Cr. 250002 (Deferred Revenue - Services) $150,000
+                      <br />✓ Total milestone value accrued
+                    </div>
+                  </div>
+
+                  {/* Step 5 - Phase 1 */}
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">Step 5️⃣ Phase 1 Complete: Discovery & Assessment</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#107E3E', marginTop: '0.5rem' }}>
+                      June 2026 - Milestone 1 Accepted
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      Dr. 250002 (Deferred Revenue) $37,500
+                      <br />Cr. 400003 (Services Revenue) $37,500
+                      <br />✓ Invoice milestone: $37,500
+                      <br />✓ Customer acceptance signed
+                    </div>
+                  </div>
+
+                  {/* Step 5 - Phase 2 */}
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">Step 5️⃣ Phase 2 Complete: Config & Build</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#107E3E', marginTop: '0.5rem' }}>
+                      August 2026 - Milestone 2 Accepted
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      Dr. 250002 (Deferred Revenue) $37,500
+                      <br />Cr. 400003 (Services Revenue) $37,500
+                      <br />✓ Invoice milestone: $37,500 (Cumulative: $75K)
+                    </div>
+                  </div>
+
+                  {/* Step 5 - Phase 3 */}
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">Step 5️⃣ Phase 3 Complete: Testing & UAT</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#107E3E', marginTop: '0.5rem' }}>
+                      October 2026 - Milestone 3 Accepted
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      Dr. 250002 (Deferred Revenue) $37,500
+                      <br />Cr. 400003 (Services Revenue) $37,500
+                      <br />✓ Invoice milestone: $37,500 (Cumulative: $112.5K)
+                    </div>
+                  </div>
+
+                  {/* Step 5 - Phase 4 */}
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">Step 5️⃣ Phase 4 Complete: Deployment & Go-Live</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#107E3E', marginTop: '0.5rem' }}>
+                      December 2026 - Milestone 4 Accepted
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      Dr. 250002 (Deferred Revenue) $37,500
+                      <br />Cr. 400003 (Services Revenue) $37,500
+                      <br />✓ Invoice milestone: $37,500 (Cumulative: $150K)
+                      <br />✓ All revenue recognized
+                    </div>
+                  </div>
+
+                  {/* Step 6 */}
+                  <div className="o2c-kpi-box">
+                    <div className="o2c-kpi-label">Step 6️⃣ Collections (4 Milestone Payments)</div>
+                    <div className="o2c-kpi-value" style={{ fontSize: '1rem', color: '#107E3E', marginTop: '0.5rem' }}>
+                      4 Payments × $37,500
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: isDarkMode ? '#b0bec5' : '#666666', marginTop: '0.5rem' }}>
+                      Dr. 110001 (Cash) $37,500 (repeat 4 times)
+                      <br />Cr. 100001 (AR) $37,500 (repeat 4 times)
+                      <br />✓ Payment upon milestone acceptance
+                      <br />✓ Total collected: $150,000
+                    </div>
+                  </div>
+
+                  {/* Summary */}
+                  <div style={{
+                    padding: '1rem',
+                    background: isDarkMode ? '#1a2a3a' : '#f8f8f8',
+                    borderRadius: '4px',
+                    borderLeft: '4px solid #0A6ED4',
+                    fontSize: '0.85rem',
+                    color: isDarkMode ? '#b0bec5' : '#666666'
+                  }}>
+                    <strong style={{ color: isDarkMode ? '#ffffff' : '#000000' }}>Summary:</strong> This line item is split into 4 milestones over 6 months (Jun-Dec 2026). Revenue is only recognized when each phase is accepted by the customer. This aligns with the project timeline and creates a predictable, phase-based revenue pattern.
+                  </div>
+                </div>
               </div>
             </div>
           )}
