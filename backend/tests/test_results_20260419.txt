@@ -1,0 +1,71 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.9, pytest-9.0.3, pluggy-1.6.0 -- C:\Users\punta\AppData\Local\Programs\Python\Python311\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\punta\Documents\SecondBrain\BrainApp\backend
+plugins: anyio-3.7.1
+collecting ... collected 28 items
+
+tests/test_endpoints.py::TestHealthEndpoint::test_health_returns_200 PASSED [  3%]
+tests/test_endpoints.py::TestHealthEndpoint::test_health_returns_required_fields PASSED [  7%]
+tests/test_endpoints.py::TestHealthEndpoint::test_health_status_is_ok PASSED [ 10%]
+tests/test_endpoints.py::TestAgentScorecard::test_scorecard_returns_200 PASSED [ 14%]
+tests/test_endpoints.py::TestAgentScorecard::test_scorecard_has_agents_field PASSED [ 17%]
+tests/test_endpoints.py::TestAgentScorecard::test_scorecard_agents_have_metrics PASSED [ 21%]
+tests/test_endpoints.py::TestDecisionsHistory::test_history_returns_200 PASSED [ 25%]
+tests/test_endpoints.py::TestDecisionsHistory::test_history_has_decisions_field PASSED [ 28%]
+tests/test_endpoints.py::TestDecisionsHistory::test_history_respects_limit_param PASSED [ 32%]
+tests/test_endpoints.py::TestWeeklyScorecard::test_weekly_returns_200 PASSED [ 35%]
+tests/test_endpoints.py::TestWeeklyScorecard::test_weekly_has_agents_field PASSED [ 39%]
+tests/test_endpoints.py::TestPhase4HealthEndpoint::test_agents_health_returns_200 PASSED [ 42%]
+tests/test_endpoints.py::TestPhase4HealthEndpoint::test_agents_health_has_required_fields PASSED [ 46%]
+tests/test_endpoints.py::TestPhase4HealthEndpoint::test_agents_health_agents_have_status PASSED [ 50%]
+tests/test_endpoints.py::TestPhase4SpecificAgentHealth::test_specific_agent_health_returns_200 PASSED [ 53%]
+tests/test_endpoints.py::TestPhase4SpecificAgentHealth::test_specific_agent_has_status_field PASSED [ 57%]
+tests/test_endpoints.py::TestPhase4CostStatus::test_cost_status_returns_200 PASSED [ 60%]
+tests/test_endpoints.py::TestPhase4CostStatus::test_cost_status_has_agents_and_summary PASSED [ 64%]
+tests/test_endpoints.py::TestPhase4CostStatus::test_cost_agents_have_warning_level PASSED [ 67%]
+tests/test_endpoints.py::TestInboxDistillerPOST::test_inbox_distill_returns_200 PASSED [ 71%]
+tests/test_endpoints.py::TestInboxDistillerPOST::test_inbox_distill_returns_status_field PASSED [ 75%]
+tests/test_endpoints.py::TestSynthesisPOST::test_synthesis_returns_200 PASSED [ 78%]
+tests/test_endpoints.py::TestSynthesisPOST::test_synthesis_returns_status PASSED [ 82%]
+tests/test_endpoints.py::TestFeedbackPOST::test_feedback_returns_200 PASSED [ 85%]
+tests/test_endpoints.py::TestFeedbackPOST::test_feedback_returns_status PASSED [ 89%]
+tests/test_endpoints.py::TestPhase4ScorecardGenerate::test_scorecard_generate_returns_200 PASSED [ 92%]
+tests/test_endpoints.py::TestPhase4ScorecardGenerate::test_scorecard_generate_has_status PASSED [ 96%]
+tests/test_endpoints.py::TestEndpointSummary::test_all_endpoints_summary PASSED [100%]
+
+============================== warnings summary ===============================
+api\routes.py:65
+  C:\Users\punta\Documents\SecondBrain\BrainApp\backend\api\routes.py:65: DeprecationWarning: 
+          on_event is deprecated, use lifespan event handlers instead.
+  
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          
+    @app.on_event("startup")
+
+..\..\..\..\AppData\Local\Programs\Python\Python311\Lib\site-packages\fastapi\applications.py:4547
+..\..\..\..\AppData\Local\Programs\Python\Python311\Lib\site-packages\fastapi\applications.py:4547
+  C:\Users\punta\AppData\Local\Programs\Python\Python311\Lib\site-packages\fastapi\applications.py:4547: DeprecationWarning: 
+          on_event is deprecated, use lifespan event handlers instead.
+  
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          
+    return self.router.on_event(event_type)
+
+api\routes.py:76
+  C:\Users\punta\Documents\SecondBrain\BrainApp\backend\api\routes.py:76: DeprecationWarning: 
+          on_event is deprecated, use lifespan event handlers instead.
+  
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          
+    @app.on_event("shutdown")
+
+tests\test_endpoints.py:26
+  C:\Users\punta\Documents\SecondBrain\BrainApp\backend\tests\test_endpoints.py:26: PytestCollectionWarning: cannot collect test class 'TestClient' because it has a __init__ constructor (from: tests/test_endpoints.py)
+    class TestClient:
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================= 28 passed, 5 warnings in 110.34s (0:01:50) ==================

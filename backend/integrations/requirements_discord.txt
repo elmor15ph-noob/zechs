@@ -1,0 +1,5 @@
+# DUO Discord Bot — pinned dependencies
+# Install with: pip install -r requirements_discord.txt
+
+discord.py==2.3.2
+aiohttp==3.9.5

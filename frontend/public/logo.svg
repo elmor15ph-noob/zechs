@@ -1,0 +1,48 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="brainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff6b35;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Brain outline -->
+  <circle cx="100" cy="85" r="45" fill="none" stroke="url(#brainGradient)" stroke-width="2" filter="url(#glow)"/>
+
+  <!-- Brain hemisphere curves -->
+  <path d="M 70 65 Q 70 50 85 50" fill="none" stroke="#00d4ff" stroke-width="1.5"/>
+  <path d="M 130 65 Q 130 50 115 50" fill="none" stroke="#00d4ff" stroke-width="1.5"/>
+  <path d="M 70 105 Q 70 120 85 120" fill="none" stroke="#ff6b35" stroke-width="1.5"/>
+  <path d="M 130 105 Q 130 120 115 120" fill="none" stroke="#ff6b35" stroke-width="1.5"/>
+
+  <!-- Neural network nodes -->
+  <circle cx="85" cy="75" r="3" fill="#00d4ff" filter="url(#glow)"/>
+  <circle cx="115" cy="75" r="3" fill="#00d4ff" filter="url(#glow)"/>
+  <circle cx="100" cy="95" r="4" fill="#ff6b35" filter="url(#glow)"/>
+  <circle cx="80" cy="95" r="3" fill="#ff6b35" filter="url(#glow)"/>
+  <circle cx="120" cy="95" r="3" fill="#ff6b35" filter="url(#glow)"/>
+
+  <!-- Connecting lines -->
+  <line x1="85" y1="75" x2="100" y2="95" stroke="#00d4ff" stroke-width="1" opacity="0.6"/>
+  <line x1="115" y1="75" x2="100" y2="95" stroke="#00d4ff" stroke-width="1" opacity="0.6"/>
+  <line x1="85" y1="75" x2="80" y2="95" stroke="#ff6b35" stroke-width="1" opacity="0.6"/>
+  <line x1="115" y1="75" x2="120" y2="95" stroke="#ff6b35" stroke-width="1" opacity="0.6"/>
+
+  <!-- Sound waves / data visualization -->
+  <path d="M 145 75 Q 150 70 155 75" fill="none" stroke="#00d4ff" stroke-width="1.5"/>
+  <path d="M 145 85 Q 150 80 155 85" fill="none" stroke="#ff6b35" stroke-width="1.5"/>
+  <path d="M 145 95 Q 150 90 155 95" fill="none" stroke="#00d4ff" stroke-width="1.5"/>
+
+  <!-- Pulse indicator -->
+  <circle cx="160" cy="85" r="2" fill="#00d4ff" filter="url(#glow)">
+    <animate attributeName="r" values="2;4;2" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/>
+  </circle>
+</svg>

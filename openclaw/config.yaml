@@ -1,0 +1,131 @@
+# OpenClaw 🦞 — Gateway Configuration
+# Reference: https://openclaw.ai
+# Install: follow openclaw.ai/docs/install
+#
+# This config maps incoming messages from each channel to Duo/Dyce/Cloud personas
+# via the BrainApp backend (POST /agents/{name}/chat).
+
+version: "1.0"
+brain: duo
+
+# ── Backend connection ────────────────────────────────────────────────────────
+backend:
+  url: http://localhost:8000
+  chat_endpoint: /agents/{persona}/chat   # {persona} replaced at runtime
+  timeout_seconds: 30
+
+# ── LLM Cost Router ───────────────────────────────────────────────────────────
+# OpenClaw passes BYO API key; the backend's cost router selects the tier.
+# T0: Ollama (free local)  →  T1: Haiku/Flash  →  T2: Sonnet/Opus  →  T3: Corp
+llm:
+  use_backend_router: true   # let BrainApp backend handle tier selection
+  byo_key_env: ANTHROPIC_API_KEY
+
+# ── Channels ──────────────────────────────────────────────────────────────────
+channels:
+
+  # Slack — Duo team channel
+  slack:
+    enabled: false   # set true after: openclaw setup slack
+    workspace: your-workspace
+    channel: "#duo-team"
+    bot_token_env: SLACK_BOT_TOKEN
+    app_token_env: SLACK_APP_TOKEN
+    # Route @mentions to specific personas
+    persona_routing:
+      "@zero":      zero
+      "@heavyarms": heavyarms
+      "@sandrock":  sandrock
+      "@altron":    altron
+      "@duo":       zero        # default: Zero handles unaddressed messages
+
+  # Telegram — mobile escalation
+  telegram:
+    enabled: false   # set true after: openclaw setup telegram
+    bot_token_env: TELEGRAM_BOT_TOKEN
+    chat_id_env: TELEGRAM_CHAT_ID
+    # All Telegram messages → Zero (escalation = strategic)
+    default_persona: zero
+
+  # CLI — for Dyce (corporate VM, no external messaging)
+  cli:
+    enabled: true    # always on — headless mode for Dyce
+    prompt: "dyce> "
+    default_persona: leo   # Dyce default: Leo (TMNT lead)
+    history_file: ~/.openclaw_history
+    persona_routing:
+      "!leo":   leo
+      "!donny": donny
+      "!raph":  raph
+      "!micky": micky
+
+  # Discord — Cloud brain (BJ partner channel)
+  discord:
+    enabled: false   # set true after Cloud fork is stable
+    bot_token_env: DISCORD_BOT_TOKEN
+    guild_id_env: DISCORD_GUILD_ID
+    channel: "cloud-brain"
+    default_persona: cloud_lead
+
+# ── Persona definitions (mirrors vault/agents/) ───────────────────────────────
+personas:
+  # ── DUO TEAM (Gundam Wing) ────────────────────────────────────────────────
+  zero:
+    display_name: "Zero"
+    emoji: "⚔️"
+    description: "Strategic Conductor — vision, decisions, system thinking"
+    brain: duo
+  heavyarms:
+    display_name: "Heavyarms"
+    emoji: "📊"
+    description: "SAP Expert — data, config, fit/gap, validation"
+    brain: duo
+  sandrock:
+    display_name: "Sandrock"
+    emoji: "🔧"
+    description: "Project Manager — planning, bridging, delivery"
+    brain: duo
+  altron:
+    display_name: "Altron"
+    emoji: "📡"
+    description: "Synthesizer — storytelling, digest, cross-brain comms"
+    brain: duo
+
+  # ── DYCE TEAM (TMNT) — corporate VM, CLI only ─────────────────────────────
+  leo:
+    display_name: "Leonardo"
+    emoji: "🐢"
+    description: "PM / Team Lead — planning, coordination, blockers"
+    brain: dyce
+  donny:
+    display_name: "Donatello"
+    emoji: "🔧"
+    description: "Dev / Architecture — implementation, design, code review"
+    brain: dyce
+  raph:
+    display_name: "Raphael"
+    emoji: "⚡"
+    description: "QA / Risk — testing, edge cases, hard truths"
+    brain: dyce
+  micky:
+    display_name: "Michelangelo"
+    emoji: "🎨"
+    description: "Creative / Synthesizer — docs, comms, UX, morale"
+    brain: dyce
+
+# ── Message routing rules ─────────────────────────────────────────────────────
+routing:
+  # If no @mention: route to default_persona for that channel
+  # If message starts with /digest: trigger Altron digest regardless of channel
+  slash_commands:
+    /digest:   { action: "POST /agents/altron/digest" }
+    /health:   { action: "GET /health" }
+    /status:   { action: "GET /orchestration/status" }
+    /cost:     { action: "GET /agents/cost-status" }
+    /logs:     { action: "GET /logs?limit=20&level=WARNING" }
+
+# ── Logging ───────────────────────────────────────────────────────────────────
+logging:
+  level: INFO
+  file: ~/.openclaw/openclaw.log
+  max_bytes: 5242880   # 5MB

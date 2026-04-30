@@ -1,0 +1,262 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   ZECHS Platform - SAP Architecture Intelligence
+   Clean, Minimal Dark Mode Styling
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+#root {
+  height: 100vh;
+  width: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #0f1620;
+  color: #e0e8f0;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   App Layout
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.app {
+  height: 100vh;
+  display: flex;
+  background-color: #0f1620;
+  color: #e0e8f0;
+  overflow: hidden;
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 220px;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Header
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.app-header {
+  background: linear-gradient(135deg, #1a3a52 0%, #0f1620 100%);
+  border-bottom: 2px solid #00d4ff;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 4px 16px rgba(0, 212, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.app-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #00d4ff;
+  margin: 0;
+}
+
+.header-subtitle {
+  font-size: 0.85rem;
+  color: #a0b0c0;
+  margin: 0.25rem 0 0 0;
+  letter-spacing: 0.05em;
+}
+
+.health-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #00d4ff;
+  margin-top: 0.5rem;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-logo svg {
+  filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.3));
+  transition: filter 0.3s ease;
+  animation: pulse 2s infinite;
+}
+
+.header-logo svg:hover {
+  filter: drop-shadow(0 0 16px rgba(0, 212, 255, 0.6));
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.error-banner {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #c41e3a;
+  color: #ffffff;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #a01729;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Main Content Area
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.dashboard {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #0f1620;
+  height: 100%;
+}
+
+.section {
+  background: linear-gradient(135deg, #1a2a3a 0%, #0f1620 100%);
+  border: 1px solid #2a4a6a;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.section h2 {
+  color: #00d4ff;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #00d4ff;
+  padding-bottom: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.section p {
+  color: #c0d0e0;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Footer
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.app-footer {
+  background: linear-gradient(135deg, #1a2a3a 0%, #0f1620 100%);
+  border-top: 1px solid #2a4a6a;
+  padding: 1.5rem 2rem;
+  text-align: center;
+  color: #7a8a9a;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+
+.app-footer p {
+  margin: 0;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Scrollbar Styling
+   ─────────────────────────────────────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f1620;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #00d4ff;
+  border-radius: 4px;
+  opacity: 0.7;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  opacity: 1;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Utility Classes
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.dark-mode {
+  background-color: #0f1620;
+  color: #e0e8f0;
+}
+
+.light-mode {
+  background-color: #f5f5f5;
+  color: #1a1a1a;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Responsive Design
+   ─────────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 1024px) {
+  .app-main {
+    margin-left: 0;
+  }
+
+  .dashboard {
+    padding: 1rem;
+  }
+
+  .section {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .header-logo {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .app-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .section h2 {
+    font-size: 1.25rem;
+  }
+}

@@ -1,0 +1,101 @@
+# ╔══════════════════════════════════════════════════════════════╗
+# ║  DUO Brain App — Instance Configuration                     ║
+# ║  Copy this file to .env or source it before starting        ║
+# ║  Each team member configures their own copy                 ║
+# ╚══════════════════════════════════════════════════════════════╝
+#
+# HOW TO USE:
+#   1. Copy this file: cp config.yaml .env   (or fill .env directly)
+#   2. Fill in YOUR values (vault path, API keys)
+#   3. Run: python backend/main.py
+#
+# FORMAT: YAML for documentation, but the actual loader reads .env
+# (KEY=VALUE format). Keep .env out of git — it contains secrets.
+# ──────────────────────────────────────────────────────────────
+
+# ── Vault (Obsidian) ──────────────────────────────────────────
+# Point this at YOUR local Obsidian vault directory.
+# Windows: C:/Users/<you>/Documents/<YourVaultName>
+# macOS:   /Users/<you>/Documents/<YourVaultName>
+# Linux:   /home/<you>/Documents/<YourVaultName>
+vault:
+  path: C:/Users/punta/Documents/SecondBrain     # CHANGE THIS
+
+# ── LanceDB (vector + keyword search) ─────────────────────────
+# Embedded — no server needed. Stored INSIDE the vault under .lancedb/
+# Change this only if you want the index outside the vault.
+lancedb:
+  path: ""     # Default: {vault_path}/.lancedb (leave empty)
+
+# ── Ollama (local LLM + embeddings) ───────────────────────────
+# Install Ollama from https://ollama.ai then:
+#   ollama pull nomic-embed-text    (for vault indexing)
+#   ollama pull gemma3:4b           (for local inference)
+ollama:
+  base_url: http://localhost:11434
+  embed_model: nomic-embed-text
+  llm_model: gemma3:4b
+
+# ── LLM Provider & Routing ────────────────────────────────────
+# Tiered: local (Ollama) → budget API (Gemini) → premium (Claude)
+# Set provider to 'ollama' for cost-free local-only operation.
+# Set to 'claude' or 'gemini' for cloud with cost tracking.
+llm:
+  provider: ollama            # ollama | gemini | claude | openai
+  model: gemma3:4b            # override model for chosen provider
+  load_balance: false         # true = Gemini primary, Claude fallback
+  # API keys — set via environment or fill below (keep secret!)
+  anthropic_api_key: ""       # sk-ant-...
+  google_api_key: ""          # AIza...
+  openai_api_key: ""          # sk-...
+
+# ── Server ────────────────────────────────────────────────────
+server:
+  host: 127.0.0.1             # use 0.0.0.0 to allow LAN access
+  port: 8000
+  reload: true                # false in production
+
+# ── Frontend ──────────────────────────────────────────────────
+frontend:
+  port: 3000
+  api_url: http://localhost:8000
+
+# ── Agent Kill Switches ───────────────────────────────────────
+# Set to false to disable an agent without touching code.
+# Useful during testing, debugging, or cost control.
+agents:
+  inbox_enabled: true
+  synthesis_enabled: true
+  sap_enabled: true
+  llm_kpi_enabled: true
+  o2c_enabled: true
+  altron_enabled: true
+
+# ── Cost Caps (per agent, per day, USD) ───────────────────────
+# Agents will refuse to run if the daily cap is exceeded.
+# Set higher for heavy use, lower for cost control.
+cost_caps:
+  inbox_distiller: 1.00
+  weekly_synthesis: 2.00
+  sap_crawler: 0.50
+  llm_kpi: 0.25
+
+# ── OctoAgent (multi-agent orchestration) ─────────────────────
+# Only needed if using the OctoAgent Orchestrator tab.
+# Install from: https://github.com/hesamsheikh/octogent
+octogent:
+  api_url: http://localhost:8787
+  enabled: true
+
+# ── Shared Knowledge (optional — team use) ────────────────────
+# For teams: point at a shared LanceDB with project docs.
+# Each person keeps their personal vault; shared collection
+# holds SAP configs, Workday specs, project decisions.
+# Leave empty for personal use only.
+shared:
+  lancedb_path: ""            # e.g. //fileserver/duo-shared/.lancedb
+  collection: "shared_sap"
+
+# ── Logging ───────────────────────────────────────────────────
+logging:
+  level: INFO                 # DEBUG | INFO | WARNING | ERROR
