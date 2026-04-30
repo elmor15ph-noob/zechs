@@ -5,10 +5,12 @@
 
 export const createFioriStyles = (isDarkMode: boolean) => `
   /* PRIMARY FIORI COLORS */
-  --fiori-primary: #0A6ED4;
-  --fiori-success: #107E3E;
-  --fiori-warning: #E17B08;
-  --fiori-error: #C00;
+  :root {
+    --fiori-primary: #0A6ED4;
+    --fiori-success: #107E3E;
+    --fiori-warning: #E17B08;
+    --fiori-error: #C00;
+  }
 
   .realtime-header {
     background: ${isDarkMode ? '#2D2D2D' : '#FFFFFF'};
