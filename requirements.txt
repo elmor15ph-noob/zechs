@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+streamlit
+langchain
+langchain-openai
+chromadb
+beautifulsoup4
+python-dotenv
+playwright
+requests
+fpdf2
+streamlit-mermaid
+pydantic
+langchain-community
