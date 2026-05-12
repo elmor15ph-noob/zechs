@@ -77,7 +77,7 @@ Mermaid Flowchart:"""
 
 # --- Expert Q&A Logic ---
 from langchain_community.vectorstores import Chroma
-from langchain_openai import OpenAIEmbeddings
+from langchain_community.embeddings import OllamaEmbeddings
 from langchain_core.prompts import ChatPromptTemplate
 
 CHROMA_DB_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "chroma_db")
@@ -85,7 +85,7 @@ COLLECTION_NAME = "sap_s4hana_docs"
 
 # Initialize Chroma and Embeddings for Retrieval
 try:
-    embeddings = OpenAIEmbeddings()
+    embeddings = OllamaEmbeddings(model=OLLAMA_MODEL, base_url=OLLAMA_BASE_URL)
     vector_store = Chroma(
         collection_name=COLLECTION_NAME,
         embedding_function=embeddings,
@@ -111,7 +111,7 @@ def query_knowledge_base(query: str) -> str:
 
     prompt = ChatPromptTemplate.from_messages([
         ("system", system_prompt),
-        ("human", "{input}"),
+        ("human", "{question}"),
     ])
 
     # Using traditional retrieval chain as fallback

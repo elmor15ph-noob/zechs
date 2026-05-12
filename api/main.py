@@ -38,14 +38,14 @@ async def analyze_workshop(background_tasks: BackgroundTasks, file: UploadFile =
     report_text = generate_alignment_report_content(notes)
 
     # Create temp file for PDF
-    fd, pdf_path = tempfile.mkstemp(suffix=".pdf", prefix=f"report_{file.filename}_")
+    fd, pdf_path = tempfile.mkstemp(suffix=".pdf", prefix="report_")
     os.close(fd) # Close file descriptor, fpdf will open it
 
     create_pdf_report(report_text, output_path=pdf_path)
 
     background_tasks.add_task(remove_file, pdf_path)
 
-    return FileResponse(pdf_path, media_type='application/pdf', filename=f"Standard_Alignment_{file.filename}.pdf")
+    return FileResponse(pdf_path, media_type='application/pdf', filename="Standard_Alignment_Report.pdf")
 
 @app.post("/generate_diagram")
 def generate_diagram(request: DiagramRequest):

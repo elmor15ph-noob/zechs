@@ -5,7 +5,7 @@ import hashlib
 from dotenv import load_dotenv
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_openai import OpenAIEmbeddings
+from langchain_community.embeddings import OllamaEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain_core.documents import Document
 
@@ -20,7 +20,7 @@ COLLECTION_NAME = "sap_s4hana_docs"
 class KnowledgeBaseIndexer:
     def __init__(self):
         # Initialize embeddings
-        self.embeddings = OpenAIEmbeddings()
+        self.embeddings = OllamaEmbeddings(model=os.getenv("OLLAMA_MODEL", "llama3"), base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"))
 
         # Initialize Chroma DB
         self.vector_store = Chroma(
