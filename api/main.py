@@ -6,7 +6,7 @@ import tempfile
 
 from api.analysis_engine import generate_alignment_report_content, create_pdf_report, generate_mermaid_diagram, query_knowledge_base
 
-app = FastAPI(title="SAP Architecture Backend API")
+app = FastAPI(title="SAPS4HANA JEDI API")
 
 class DiagramRequest(BaseModel):
     process_description: str
@@ -22,7 +22,7 @@ def remove_file(path: str):
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to the SAP Architecture Backend", "status": "ok"}
+    return {"message": "Welcome to the SAPS4HANA JEDI", "status": "ok"}
 
 @app.get("/health")
 def health_check():

@@ -78,8 +78,6 @@ Mermaid Flowchart:"""
 # --- Expert Q&A Logic ---
 from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
-from langchain.chains import create_retrieval_chain
-from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
 
 CHROMA_DB_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "chroma_db")
@@ -116,8 +114,9 @@ def query_knowledge_base(query: str) -> str:
         ("human", "{input}"),
     ])
 
-    question_answer_chain = create_stuff_documents_chain(llm, prompt)
-    qa_chain = create_retrieval_chain(retriever, question_answer_chain)
+    # Using traditional retrieval chain as fallback
+    from langchain.chains import RetrievalQA
+    qa_chain = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever, chain_type_kwargs={"prompt": prompt})
 
-    response = qa_chain.invoke({"input": query})
-    return response["answer"]
+    response = qa_chain.invoke(query)
+    return response["result"]

@@ -11,3 +11,4 @@ requests
 fpdf2
 streamlit-mermaid
 pydantic
+langchain-community

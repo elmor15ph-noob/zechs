@@ -2,12 +2,12 @@ import streamlit as st
 import requests
 from streamlit_mermaid import st_mermaid
 
-st.set_page_config(page_title="SAP S/4HANA Architect", layout="wide")
+st.set_page_config(page_title="SAPS4HANA JEDI", layout="wide")
 
 API_BASE = "http://127.0.0.1:8000"
 
-st.sidebar.title("SAP S/4HANA Architect")
-mode = st.sidebar.radio("Select Mode", ["Expert Q&A", "Solution Architect"])
+st.sidebar.title("SAPS4HANA JEDI")
+mode = st.sidebar.radio("Select Mode", ["Expert Q&A", "JEDI Architect"])
 
 # Backend Health Check
 try:
@@ -60,8 +60,8 @@ if mode == "Expert Q&A":
         # Add assistant response to chat history
         st.session_state.messages.append({"role": "assistant", "content": answer})
 
-elif mode == "Solution Architect":
-    st.title("Solution Architect Tools")
+elif mode == "JEDI Architect":
+    st.title("JEDI Architect Tools")
 
     tab1, tab2 = st.tabs(["Workshop Gap Analysis", "Diagram-as-Code"])
 
