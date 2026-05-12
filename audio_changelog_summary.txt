@@ -1,0 +1,9 @@
+Here is a two-minute summary of the recent SAP S/4HANA application updates:
+
+First, I established the foundation by creating an AGENTS.md file in the root directory. This instructs me, and any future agents, to operate as an SAP S/4HANA Enterprise Architect, strictly prioritizing the SAP Activate methodology and SAP Best Practices in all our outputs.
+
+Next, I built the 'Solution Architect' logic layer into our FastAPI backend. Instead of a cloud provider, I hooked everything up to run locally using Ollama. I created two major capabilities: First, the 'Workshop Analysis Engine'. This endpoint accepts markdown files containing workshop notes, prompts the local LLM to map keywords against standard SAP Best Practice IDs, and returns a cleanly formatted Gap-Analysis PDF report using the fpdf2 library. Second, I built the 'Diagram-as-Code' generator. It takes a business process description and forces the LLM to output valid Mermaid.js syntax using strict SAP standard swimlanes: Customer, SAP S/4HANA, and External System.
+
+To handle the massive scale of the SAP library, I refactored our single Playwright scraper. I created a base scraping template and then split it into four dedicated, parallel scripts focusing on Finance, Sales, Procurement, and Supply Chain. This modular approach allows you to run them concurrently, dramatically speeding up the ingestion rate into our ChromaDB vector store.
+
+Finally, I updated the Streamlit frontend. It now features a clean sidebar navigation with two modes. The 'Solution Architect' mode provides an interface to upload workshop notes for PDF generation and a text area to generate process flowcharts, instantly rendering the Mermaid diagrams directly in the UI. The 'Expert Q&A' mode is stubbed out and ready to connect to our ChromaDB knowledge base for conversational retrieval. Everything is fully integrated and ready for action.
