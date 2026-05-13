@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogSquare } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 
 interface ConfigLog {
   id: string;
@@ -93,7 +93,7 @@ const ConfigLogger: React.FC<{ isDarkMode?: boolean }> = ({ isDarkMode = true })
     <div className={`config-container ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
       <div className="config-header">
         <h1 className="config-title">
-          <LogSquare size={32} />
+          <BookOpen size={32} />
           Configuration Rationale Logger
         </h1>
         <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.9rem', color: isDarkMode ? '#b0bec5' : '#666666' }}>

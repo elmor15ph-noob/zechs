@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import Sidebar from './components/Sidebar';
+import SidebarRestructured from './components/SidebarRestructured';
+import DashboardHub from './components/DashboardHub';
+import PhaseNavigator from './components/PhaseNavigator';
 import Constellation from './components/Constellation';
 import SearchSection from './components/SearchSection';
 import SAPAssistant from './components/SAPAssistant';
@@ -52,7 +54,13 @@ function App() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.ctrlKey || e.metaKey) {
-        if (e.shiftKey && e.key === 'S') {
+        if (e.key === 'Home') {
+          e.preventDefault();
+          setActiveSection('dashboard-hub');
+        } else if (e.key === '/') {
+          e.preventDefault();
+          setActiveSection('phase-navigator');
+        } else if (e.shiftKey && e.key === 'S') {
           e.preventDefault();
           setActiveSection('simulator');
         } else if (e.shiftKey && e.key === 'E') {
@@ -129,6 +137,10 @@ function App() {
 
   const renderSection = () => {
     switch (activeSection) {
+      case 'dashboard-hub':
+        return <DashboardHub isDarkMode={isDarkMode} onNavigate={handleNavigate} />;
+      case 'phase-navigator':
+        return <PhaseNavigator isDarkMode={isDarkMode} onToolSelect={handleNavigate} />;
       case 'constellation':
         return <Constellation isDarkMode={isDarkMode} />;
       case 'search':
@@ -178,7 +190,7 @@ function App() {
 
   return (
     <div className={`app ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-      <Sidebar active={activeSection} onNavigate={handleNavigate} onThemeToggle={() => {}} isDarkMode={isDarkMode} />
+      <SidebarRestructured active={activeSection} onNavigate={handleNavigate} onThemeToggle={() => {}} isDarkMode={isDarkMode} />
 
       <div className="app-main">
         <header className="app-header">

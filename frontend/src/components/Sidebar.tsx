@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, FileText, BarChart3, Moon, Sun, Brain, Activity, ScrollText, Zap, Network, Target, AlertCircle, MessageCircle, LogSquare, CheckCircle } from 'lucide-react';
+import { Search, FileText, BarChart3, Moon, Sun, Brain, Activity, ScrollText, Zap, Network, Target, AlertCircle, MessageCircle, BookOpen, CheckCircle } from 'lucide-react';
 
 interface NavItem {
   id: string;
@@ -17,7 +17,7 @@ const navItems: NavItem[] = [
   { id: 'test-case', label: 'Test Case Gen', icon: <FileText size={20} />, shortcut: 'Ctrl+Shift+T' },
   { id: 'ticket-triage', label: 'Ticket Triage', icon: <AlertCircle size={20} />, shortcut: 'Ctrl+Shift+I' },
   { id: 'ask-architect', label: 'Ask Architect', icon: <MessageCircle size={20} />, shortcut: 'Ctrl+Shift+H' },
-  { id: 'config-logger', label: 'Config Logger', icon: <LogSquare size={20} />, shortcut: 'Ctrl+Shift+O' },
+  { id: 'config-logger', label: 'Config Logger', icon: <BookOpen size={20} />, shortcut: 'Ctrl+Shift+O' },
   { id: 'cutover-center', label: 'Cutover Center', icon: <Zap size={20} />, shortcut: 'Ctrl+Shift+U' },
   { id: 'execution-plan', label: 'Execution Plan', icon: <Target size={20} />, shortcut: 'Ctrl+P' },
   { id: 'realtime-simulator', label: 'S/4HANA Realtime', icon: <Zap size={20} />, shortcut: 'Ctrl+Shift+R' },
