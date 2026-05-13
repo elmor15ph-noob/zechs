@@ -10,6 +10,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { id: 'constellation', label: 'System Overview', icon: <Brain size={20} />, shortcut: 'Ctrl+`' },
+  { id: 'soldoc', label: 'SolDoc Generator', icon: <FileText size={20} />, shortcut: 'Ctrl+Shift+G' },
   { id: 'execution-plan', label: 'Execution Plan', icon: <Target size={20} />, shortcut: 'Ctrl+P' },
   { id: 'realtime-simulator', label: 'S/4HANA Realtime', icon: <Zap size={20} />, shortcut: 'Ctrl+Shift+R' },
   { id: 'search', label: 'Knowledge Search', icon: <Search size={20} />, shortcut: 'Ctrl+K' },

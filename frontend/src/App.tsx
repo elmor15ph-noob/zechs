@@ -13,6 +13,7 @@ import AgentObservabilityCard from './components/AgentObservabilityCard';
 import EndpointDiagnostics from './components/EndpointDiagnostics';
 import LogsPanel from './components/LogsPanel';
 import RealtimeS4HANASimulator from './components/RealtimeS4HANASimulator';
+import SolDocGenerator from './components/SolDocGenerator';
 import { Brain, CheckCircle, Zap } from 'lucide-react';
 
 interface HealthStatus {
@@ -52,6 +53,9 @@ function App() {
         } else if (e.shiftKey && e.key === 'A') {
           e.preventDefault();
           setActiveSection('enterprise-architecture');
+        } else if (e.shiftKey && e.key === 'G') {
+          e.preventDefault();
+          setActiveSection('soldoc');
         } else if (e.key === 'k') {
           e.preventDefault();
           setActiveSection('search');
@@ -117,6 +121,8 @@ function App() {
         return <ExecutionPlan isDarkMode={isDarkMode} />;
       case 'realtime-simulator':
         return <RealtimeS4HANASimulator isDarkMode={isDarkMode} />;
+      case 'soldoc':
+        return <SolDocGenerator isDarkMode={isDarkMode} />;
       default:
         return <Constellation isDarkMode={isDarkMode} />;
     }
