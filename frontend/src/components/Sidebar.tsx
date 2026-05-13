@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, FileText, BarChart3, Moon, Sun, Brain, Activity, ScrollText, Zap, Network, Target } from 'lucide-react';
+import { Search, FileText, BarChart3, Moon, Sun, Brain, Activity, ScrollText, Zap, Network, Target, AlertCircle, MessageCircle, LogSquare, CheckCircle } from 'lucide-react';
 
 interface NavItem {
   id: string;
@@ -11,6 +11,14 @@ interface NavItem {
 const navItems: NavItem[] = [
   { id: 'constellation', label: 'System Overview', icon: <Brain size={20} />, shortcut: 'Ctrl+`' },
   { id: 'soldoc', label: 'SolDoc Generator', icon: <FileText size={20} />, shortcut: 'Ctrl+Shift+G' },
+  { id: 'clean-core', label: 'Clean-Core Checker', icon: <CheckCircle size={20} />, shortcut: 'Ctrl+Shift+C' },
+  { id: 'sap-note-radar', label: 'SAP Note Radar', icon: <AlertCircle size={20} />, shortcut: 'Ctrl+Shift+N' },
+  { id: 'fit-standard', label: 'Fit-to-Standard', icon: <Zap size={20} />, shortcut: 'Ctrl+Shift+F' },
+  { id: 'test-case', label: 'Test Case Gen', icon: <FileText size={20} />, shortcut: 'Ctrl+Shift+T' },
+  { id: 'ticket-triage', label: 'Ticket Triage', icon: <AlertCircle size={20} />, shortcut: 'Ctrl+Shift+I' },
+  { id: 'ask-architect', label: 'Ask Architect', icon: <MessageCircle size={20} />, shortcut: 'Ctrl+Shift+H' },
+  { id: 'config-logger', label: 'Config Logger', icon: <LogSquare size={20} />, shortcut: 'Ctrl+Shift+O' },
+  { id: 'cutover-center', label: 'Cutover Center', icon: <Zap size={20} />, shortcut: 'Ctrl+Shift+U' },
   { id: 'execution-plan', label: 'Execution Plan', icon: <Target size={20} />, shortcut: 'Ctrl+P' },
   { id: 'realtime-simulator', label: 'S/4HANA Realtime', icon: <Zap size={20} />, shortcut: 'Ctrl+Shift+R' },
   { id: 'search', label: 'Knowledge Search', icon: <Search size={20} />, shortcut: 'Ctrl+K' },

@@ -14,6 +14,14 @@ import EndpointDiagnostics from './components/EndpointDiagnostics';
 import LogsPanel from './components/LogsPanel';
 import RealtimeS4HANASimulator from './components/RealtimeS4HANASimulator';
 import SolDocGenerator from './components/SolDocGenerator';
+import CleanCoreChecker from './components/CleanCoreChecker';
+import SAPNoteRadar from './components/SAPNoteRadar';
+import FitToStandardAssistant from './components/FitToStandardAssistant';
+import TestCaseGenerator from './components/TestCaseGenerator';
+import TicketTriage from './components/TicketTriage';
+import AskArchitect from './components/AskArchitect';
+import ConfigLogger from './components/ConfigLogger';
+import CutoverCenter from './components/CutoverCenter';
 import { Brain, CheckCircle, Zap } from 'lucide-react';
 
 interface HealthStatus {
@@ -83,6 +91,30 @@ function App() {
         } else if (e.shiftKey && e.key === 'R') {
           e.preventDefault();
           setActiveSection('realtime-simulator');
+        } else if (e.shiftKey && e.key === 'C') {
+          e.preventDefault();
+          setActiveSection('clean-core');
+        } else if (e.shiftKey && e.key === 'N') {
+          e.preventDefault();
+          setActiveSection('sap-note-radar');
+        } else if (e.shiftKey && e.key === 'F') {
+          e.preventDefault();
+          setActiveSection('fit-standard');
+        } else if (e.shiftKey && e.key === 'T') {
+          e.preventDefault();
+          setActiveSection('test-case');
+        } else if (e.shiftKey && e.key === 'I') {
+          e.preventDefault();
+          setActiveSection('ticket-triage');
+        } else if (e.shiftKey && e.key === 'H') {
+          e.preventDefault();
+          setActiveSection('ask-architect');
+        } else if (e.shiftKey && e.key === 'O') {
+          e.preventDefault();
+          setActiveSection('config-logger');
+        } else if (e.shiftKey && e.key === 'U') {
+          e.preventDefault();
+          setActiveSection('cutover-center');
         }
       }
     };
@@ -123,6 +155,22 @@ function App() {
         return <RealtimeS4HANASimulator isDarkMode={isDarkMode} />;
       case 'soldoc':
         return <SolDocGenerator isDarkMode={isDarkMode} />;
+      case 'clean-core':
+        return <CleanCoreChecker isDarkMode={isDarkMode} />;
+      case 'sap-note-radar':
+        return <SAPNoteRadar isDarkMode={isDarkMode} />;
+      case 'fit-standard':
+        return <FitToStandardAssistant isDarkMode={isDarkMode} />;
+      case 'test-case':
+        return <TestCaseGenerator isDarkMode={isDarkMode} />;
+      case 'ticket-triage':
+        return <TicketTriage isDarkMode={isDarkMode} />;
+      case 'ask-architect':
+        return <AskArchitect isDarkMode={isDarkMode} />;
+      case 'config-logger':
+        return <ConfigLogger isDarkMode={isDarkMode} />;
+      case 'cutover-center':
+        return <CutoverCenter isDarkMode={isDarkMode} />;
       default:
         return <Constellation isDarkMode={isDarkMode} />;
     }
