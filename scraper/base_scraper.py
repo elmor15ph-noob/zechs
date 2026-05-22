@@ -75,7 +75,7 @@ class SAPScraper:
                     }''')
 
                     for href in hrefs:
-                        if href and href.startswith(BASE_URL) and "SAP_S4HANA_CLOUD" in href:
+                        if href and href.startswith(BASE_URL) and any(p in href for p in ["SAP_S4HANA_CLOUD", "SAP_S4HANA_ON-PREMISE"]):
                             clean_url = href.split('#')[0]
                             if clean_url not in self.visited_urls:
                                 links.append(clean_url)
