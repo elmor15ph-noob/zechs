@@ -3,5 +3,9 @@ from scraper.base_scraper import SAPScraper
 
 if __name__ == "__main__":
     scraper = SAPScraper(category_name="procurement")
-    # Hypothetical targeted URL for Procurement
-    asyncio.run(scraper.crawl("https://help.sap.com/docs/SAP_S4HANA_CLOUD?task=procurement", max_pages=10))
+    start_urls = [
+        "https://help.sap.com/docs/SAP_S4HANA_CLOUD?task=procurement",
+        "https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE?task=procurement",
+        "https://help.sap.com/docs/SAP_S4HANA_CLOUD_PRIVATE_EDITION?task=procurement"
+    ]
+    asyncio.run(scraper.crawl(start_urls, max_pages=10))

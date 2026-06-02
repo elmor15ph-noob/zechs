@@ -75,10 +75,12 @@ class SAPScraper:
                     }''')
 
                     for href in hrefs:
-                        if href and href.startswith(BASE_URL) and "SAP_S4HANA_CLOUD" in href:
-                            clean_url = href.split('#')[0]
-                            if clean_url not in self.visited_urls:
-                                links.append(clean_url)
+                        if href and href.startswith(BASE_URL):
+                            valid_products = ["SAP_S4HANA_CLOUD", "SAP_S4HANA_ON-PREMISE", "SAP_S4HANA_CLOUD_PRIVATE_EDITION"]
+                            if any(product in href for product in valid_products):
+                                clean_url = href.split('#')[0]
+                                if clean_url not in self.visited_urls:
+                                    links.append(clean_url)
 
                     await page.close()
                     return links
@@ -91,10 +93,13 @@ class SAPScraper:
                         return []
         return []
 
-    async def crawl(self, start_url: str, max_pages: int = 10):
+    async def crawl(self, start_urls, max_pages: int = 10):
+        if isinstance(start_urls, str):
+            start_urls = [start_urls]
+
         async with async_playwright() as p:
             browser = await p.chromium.launch()
-            queue = [start_url]
+            queue = list(start_urls)
             pages_processed = 0
 
             while queue and pages_processed < max_pages:
