@@ -10,7 +10,8 @@ cleanup() {
 trap cleanup EXIT SIGINT SIGTERM
 
 echo "Starting FastAPI backend..."
-uvicorn api.main:app --host 127.0.0.1 --port 8000 &
+cd backend && uvicorn api.routes:app --host 127.0.0.1 --port 8000 &
+cd ..
 
 echo "Starting Streamlit frontend..."
 streamlit run frontend/app.py &
